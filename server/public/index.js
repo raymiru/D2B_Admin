@@ -37,4 +37,10 @@ let msgInput = document.querySelector('#msg');
 
 document.querySelector("#bet").addEventListener('submit', betNetworkHandler);
 document.querySelector("#user_list").addEventListener('submit', usersListHandler);
+let test = document.querySelector('#test');
+
+socket.on('bet_msg_from_watcher', msg => {
+   console.log(msg)
+    test.innerText = msg.bank
+})
 
