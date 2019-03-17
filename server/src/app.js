@@ -12,7 +12,7 @@ const port = process.env.PORT || '4000';
 app.set('port', port);
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 server.listen(port, () => {
     console.log(`Running on ${port}`)
