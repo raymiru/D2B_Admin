@@ -3,7 +3,7 @@
         <v-container style="background-color: whitesmoke;" class="text-md-center">
             <v-layout row wrap>
                 <v-flex md4 sm12 class="pa-5">
-                    <v-layout v-on:click="chooseWinner(1)" v-bind:class="{active_team_card: winner.team_1_winner}"
+                    <v-layout v-on:click="chooseWinner(1)" v-bind:class="{active_team_card: winner === 1}"
                               class="team_card pa-5" row wrap>
                         <v-flex md12>
                             <div style="">{{team_1_name}}</div>
@@ -32,7 +32,10 @@
                                 <div class="odds">{{koef_t2}}</div>
                             </v-flex>
                             <v-flex md12>
-                                <v-form row wrap>
+                                <v-form
+                                        @submit="placeBet"
+                                        row wrap
+                                >
                                     <v-flex class="ma-4" md12 d-inline-flex>
 
 
@@ -53,7 +56,7 @@
 
                                     </v-flex>
                                     <v-flex>
-                                        <v-btn class="v-btn--large" dark>PLACE BET</v-btn>
+                                        <v-btn type="submit" class="v-btn--large" dark>PLACE BET</v-btn>
                                     </v-flex>
 
 
@@ -63,7 +66,7 @@
                     </div>
                 </v-flex>
                 <v-flex md4 sm12 class="pa-5">
-                    <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner.team_2_winner}"
+                    <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
                               class="team_card pa-5" row wrap>
                         <v-flex md12>
                             <div>{{team_2_name}}</div>
@@ -88,10 +91,7 @@
                 map_num_info: 'map_num_info',
                 bo: 'bo_info',
                 max_bet: 0,
-                winner: {
-                    team_1_winner: 0,
-                    team_2_winner: 0
-                },
+                winner: 0,
                 bet_value: undefined,
                 user_list: []
             }
@@ -119,7 +119,7 @@
                 let count = 0
                 for (let prop in data) {
                     if (data[prop].permission === "player") {
-                         this.user_list[count] = data[prop].steam_username;
+                        this.user_list[count] = data[prop].steam_username;
                         count++;
                     }
                 }
@@ -127,23 +127,27 @@
         },
         methods: {
             chooseWinner(t_winner) {
-                if (t_winner === 1) {
-                    this.winner.team_1_winner = 1;
-                    this.winner.team_2_winner = 0;
-                } else if (t_winner === 2) {
-                    this.winner.team_2_winner = 1;
-                    this.winner.team_1_winner = 0;
-                }
+                this.winner = t_winner;
             },
 
-            getPlayerList() {
+            placeBet(e) {
+                e.preventDefault();
 
-            },
+                this.user_list.forEach(element => {
+                    console.log(element)
+                    this.$socket.emit('bet_msg_to_player', {
+                        steam_username: element,
+                        team_winner: this.winner,
+                        bet_val: this.bet_value
+                    })
+                })
 
-            setMaxBet() {
-                this.bet_value = this.max_bet
-                console.log(this.user_list)
             }
+        },
+
+
+        setMaxBet() {
+            this.bet_value = this.max_bet
         }
     }
 
