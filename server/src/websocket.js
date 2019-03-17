@@ -29,7 +29,9 @@ module.exports = (io) => {
         }
 
         socket.on('user_list', () => {
-            console.log(user_list)
+            connectedUsers['admin'].emit('user_list', () => {
+                user_list
+            })
         });
 
         socket.on('bet_msg_to_player', msg => {
