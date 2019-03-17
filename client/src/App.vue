@@ -47,11 +47,7 @@
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn
-                                                    v-on:click="setMaxBet()"
-                                                    fab
-                                            >Max
-                                            </v-btn>
+                                            <v-btn type="button" v-on:click="setMaxBet" fab >Max</v-btn>
                                         </v-flex>
 
                                     </v-flex>
@@ -142,16 +138,13 @@
                     })
                 })
 
+            },
+            setMaxBet() {
+                console.log('MAX BET')
+                this.bet_value = this.max_bet
             }
         },
-
-
-        setMaxBet() {
-            this.bet_value = this.max_bet
-        }
     }
-
-
 </script>
 
 <style lang="css">
