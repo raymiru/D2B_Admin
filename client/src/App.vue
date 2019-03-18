@@ -54,6 +54,9 @@
                                     <v-flex>
                                         <v-btn type="submit" class="v-btn--large" dark>PLACE BET</v-btn>
                                     </v-flex>
+                                    <v-flex>
+
+                                    </v-flex>
 
 
                                 </v-form>
@@ -71,6 +74,16 @@
                 </v-flex>
             </v-layout>
         </v-container>
+        <v-container style="background-color: #9ccc65; height: 100%">
+            <v-layout>
+                <v-flex md9>
+                    <div class="ma-4">Match URL: {{match_url}}<v-btn type="button" v-on:click="urlHandler" fab >URL</v-btn></div>
+                </v-flex>
+                <v-flex md6>
+                    <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </v-app>
 </template>
 
@@ -79,6 +92,7 @@
         name: 'app',
         data() {
             return {
+                match_url: 'Watcher not started yet',
                 team_1_name: undefined,
                 team_2_name: undefined,
                 koef_t1: 0,
@@ -97,11 +111,13 @@
                 user_id: 0,
                 steam_username: 'admin',
                 permission: 'admin'
-            })
+            });
+
 
         },
         sockets: {
             bet_msg_from_watcher: function (data) {
+                if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
                 if (data.team_2_name) this.team_2_name = data.team_2_name;
                 if (data.koef_t1) this.koef_t1 = data.koef_t1;
@@ -142,6 +158,23 @@
             setMaxBet() {
                 console.log('MAX BET')
                 this.bet_value = this.max_bet
+            },
+            urlHandler() {
+                console.log('URL HANDLER')
+                this.user_list.forEach(element => {
+                    console.log(element)
+                    this.$socket.emit('url_handler', {
+                        steam_username: element,
+                        match_url: this.match_url
+
+                    })
+                })
+            },
+            userList() {
+                console.log('USER LSIT')
+                this.user_list.forEach(element => {
+                    console.log(element)
+                })
             }
         },
     }

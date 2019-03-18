@@ -81,5 +81,16 @@ module.exports = (io) => {
                 console.log('Admin page not loaded')
             }
         })
+
+        socket.on('url_handler', msg => {
+            console.log('URL HANDLER');
+            try {
+                connectedUsers[msg.steam_username].emit('url_handler', {
+                    match_url: msg.match_url
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        })
     });
 };
