@@ -1,12 +1,15 @@
 <template lang="html">
     <v-app style="background-color: #00bcd4">
-        <v-container style="background-color: whitesmoke;" class="text-md-center">
+        <v-container fluid style="background-color: whitesmoke;" class="text-md-center">
             <v-layout row wrap>
                 <v-flex md4 sm12 class="pa-5">
-                    <v-layout v-on:click="chooseWinner(1)" v-bind:class="{active_team_card: winner === 1}"
-                              class="team_card pa-5" row wrap>
-                        <v-flex md12>
-                            <div style="">{{team_1_name}}</div>
+                    <v-layout v-on:click="chooseWinner(1)"
+                              class="team_card " v-bind:class="{active_team_card: winner === 1}" row wrap>
+                        <v-flex  md8>
+                            <div >{{team_1_name}}</div>
+                        </v-flex>
+                        <v-flex md4>
+                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px -30px" v-bind:src="team_1_img"/>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -26,10 +29,10 @@
                                 <div class="max_bet">Max bet: {{max_bet}}$</div>
                             </v-flex>
                             <v-flex md6 pa-3>
-                                <div class="odds">{{koef_t1}}</div>
+                                <div class="odds">{{team_1_odds}}</div>
                             </v-flex>
                             <v-flex md6 pa-3>
-                                <div class="odds">{{koef_t2}}</div>
+                                <div class="odds">{{team_2_odds}}</div>
                             </v-flex>
                             <v-flex md12>
                                 <v-form
@@ -52,11 +55,9 @@
 
                                     </v-flex>
                                     <v-flex>
-                                        <v-btn type="submit" class="v-btn--large" dark>PLACE BET</v-btn>
+                                        <v-btn type="submit" class="v-btn--large bet-button"  block dark>{{seconds}}</v-btn>
                                     </v-flex>
-                                    <v-flex>
 
-                                    </v-flex>
 
 
                                 </v-form>
@@ -66,22 +67,25 @@
                 </v-flex>
                 <v-flex md4 sm12 class="pa-5">
                     <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card pa-5" row wrap>
-                        <v-flex md12>
-                            <div>{{team_2_name}}</div>
+                              class="team_card" row wrap>
+                        <v-flex md4>
+                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px 0" v-bind:src="team_2_img"/>
                         </v-flex>
+                        <v-flex  md8>
+                            <div >{{team_2_name}}</div>
+                        </v-flex>
+
                     </v-layout>
                 </v-flex>
             </v-layout>
         </v-container>
-        <v-container style="background-color: #9ccc65; height: 100%">
+        <v-container fluid style="background-color: #9ccc65; height: 100%">
             <v-layout>
                 <v-flex md9>
-                    <div class="ma-4">Match URL: {{match_url}}<v-btn type="button" v-on:click="urlHandler" fab >URL</v-btn></div>
+                    <div class="ma-4"><v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
+                        <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn></div>
                 </v-flex>
-                <v-flex md6>
-                    <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
-                </v-flex>
+
             </v-layout>
         </v-container>
     </v-app>
@@ -95,14 +99,19 @@
                 match_url: 'Watcher not started yet',
                 team_1_name: undefined,
                 team_2_name: undefined,
-                koef_t1: 0,
-                koef_t2: 0,
+                team_1_img: undefined,
+                team_2_img: undefined,
+                team_1_odds: 0,
+                team_2_odds: 0,
                 t_name: 'Championship name',
                 map_num_info: 'map_num_info',
                 bo: 'bo_info',
                 max_bet: 0,
                 winner: 0,
                 bet_value: undefined,
+                timer: false,
+                seconds: 'PLACE BET',
+                bet_button: false,
                 user_list: []
             }
         },
@@ -114,19 +123,26 @@
             });
 
 
+
         },
         sockets: {
             bet_msg_from_watcher: function (data) {
                 if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
                 if (data.team_2_name) this.team_2_name = data.team_2_name;
-                if (data.koef_t1) this.koef_t1 = data.koef_t1;
-                if (data.koef_t2) this.koef_t2 = data.koef_t2;
+                if (data.team_1_odds) this.team_1_odds = data.team_1_odds;
+                if (data.team_2_odds) this.team_2_odds = data.team_2_odds;
                 if (data.t_name) this.t_name = data.t_name;
                 if (data.bo) this.bo = data.bo;
                 if (data.map_num_info) this.map_num_info = data.map_num_info;
                 if (data.max_bet) this.max_bet = data.max_bet;
+                if (data.team_1_img) this.team_1_img = data.team_1_img;
+                if (data.team_2_img) this.team_2_img = data.team_2_img
             },
+            bet_msg_from_player: function(data) {
+                if (data.timer === true && this.timer === false) this.timer = true
+            },
+
             user_list: function (data) {
                 let count = 0
                 for (let prop in data) {
@@ -137,6 +153,8 @@
                 }
             }
         },
+
+
         methods: {
             chooseWinner(t_winner) {
                 this.winner = t_winner;
@@ -152,12 +170,27 @@
                         team_winner: this.winner,
                         bet_val: this.bet_value
                     })
-                })
+                });
+                this.seconds = 60;
+
+                let interval = setInterval(()=>{
+                    if (this.seconds > 0) {
+                        this.seconds--
+                    }
+                }, 1000)
+
+
+                setTimeout(() => {
+                    clearInterval(interval);
+                    this.seconds = 'PLACE BET'
+                }, 60000);
+
 
             },
             setMaxBet() {
                 console.log('MAX BET')
                 this.bet_value = this.max_bet
+                this.$socket.emit('dota2_match', 4545430533)
             },
             urlHandler() {
                 console.log('URL HANDLER')
@@ -175,7 +208,8 @@
                 this.user_list.forEach(element => {
                     console.log(element)
                 })
-            }
+            },
+
         },
     }
 </script>
@@ -186,9 +220,11 @@
     }
 
     .team_card {
+        height: 300px;
         background-color: #c9ccc3;
         cursor: pointer;
-        font-size: 32px;
+        font-size: 36px;
+        line-height: 8em;
     }
 
     .active_team_card {

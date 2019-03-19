@@ -53,10 +53,12 @@ module.exports = (io) => {
                     t_name: msg.t_name,
                     team_1_name: msg.team_1_name,
                     team_2_name: msg.team_2_name,
+                    team_1_img: msg.team_1_img,
+                    team_2_img: msg.team_2_img,
                     bo: msg.bo,
                     map_num_info: msg.map_num_info,
-                    koef_t1: msg.koef_t1,
-                    koef_t2: msg.koef_t2,
+                    team_1_odds: msg.team_1_odds,
+                    team_2_odds: msg.team_2_odds,
                     max_bet: msg.max_bet
                 })
             } catch (e) {
@@ -68,14 +70,15 @@ module.exports = (io) => {
         socket.on('bet_msg_from_player', msg => {
             console.log(msg);
             try {
-                connectedUsers['admin'].emit({
+                connectedUsers['admin'].emit('bet_msg_from_player',{
                     bank: msg.bank,
                     place_summ_t1: msg.place_summ_t1,
                     place_summ_t2: msg.place_summ_t2,
                     earn_summ_t1: msg.earn_summ_t1,
                     earn_summ_t2: msg.earn_summ_t2,
                     place_odds_t1: msg.place_odds_t1,
-                    place_odds_t2: msg.place_odds_t2
+                    place_odds_t2: msg.place_odds_t2,
+                    timer: msg.timer
                 })
             } catch (e) {
                 console.log('Admin page not loaded')

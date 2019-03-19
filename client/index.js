@@ -11,6 +11,7 @@ Vue.use(new VueSocketIO({
     connection: 'http://localhost:4000'
 }));
 
+
 new Vue({
     el: '#app',
     render: h => h(App)
