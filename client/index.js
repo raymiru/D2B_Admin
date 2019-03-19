@@ -8,7 +8,7 @@ import VueSocketIO from 'vue-socket.io'
 Vue.use(Vuetify);
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: 'http://localhost:4000'
+    connection: 'http://35.246.13.97/'
 }));
 
 
