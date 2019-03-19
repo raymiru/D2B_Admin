@@ -2,31 +2,45 @@
     <v-app style="background-color: #00bcd4">
         <v-container fluid style="background-color: whitesmoke;" class="text-md-center">
             <v-layout row wrap>
-                <v-flex md4 sm12 class="pa-5">
+                <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(1)"
                               class="team_card " v-bind:class="{active_team_card: winner === 1}" row wrap>
-                        <v-flex  md8>
-                            <div >{{team_1_name}}</div>
+                        <v-flex md8>
+                            <div>{{team_1_name}}</div>
                         </v-flex>
                         <v-flex md4>
-                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px -30px" v-bind:src="team_1_img"/>
+                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px -30px"
+                                 v-bind:src="team_1_img"/>
                         </v-flex>
                     </v-layout>
                 </v-flex>
-                <v-flex md4 sm12>
+                <v-flex md4 sm4>
                     <div class="pa-3">
                         <v-layout row wrap>
                             <!--<v-flex md12>-->
                             <!--<div>{{t_name}}</div>-->
                             <!--</v-flex>-->
                             <v-flex md12>
-                                <div>{{map_num_info}}</div>
-                            </v-flex>
-                            <v-flex md12>
                                 <div>{{bo}}</div>
                             </v-flex>
                             <v-flex md12>
-                                <div class="max_bet">Max bet: {{max_bet}}$</div>
+                                <div>Finished</div>
+                            </v-flex>
+                            <v-flex md12>
+                                <v-layout >
+                                    <v-flex md3>
+                                        <div class="max_bet">Radiant:</div>
+                                    </v-flex>
+                                    <v-flex md3 lg3>
+                                        <div class="max_bet">RLead</div>
+                                    </v-flex>
+                                    <v-flex md3 lg3>
+                                        <div class="max_bet">Dlead</div>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <div class="max_bet">Dire</div>
+                                    </v-flex>
+                                </v-layout>
                             </v-flex>
                             <v-flex md6 pa-3>
                                 <div class="odds">{{team_1_odds}}</div>
@@ -50,14 +64,26 @@
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="setMaxBet" fab >Max</v-btn>
+                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>0.5
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>0.7
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>1
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button" v-on:click="setMaxBet" fab>{{max_bet}}</v-btn>
                                         </v-flex>
 
                                     </v-flex>
                                     <v-flex>
-                                        <v-btn type="submit" class="v-btn--large bet-button"  block dark>{{seconds}}</v-btn>
+                                        <v-btn type="submit" style="height: 90px; font-size: 26px" class="v-btn--large bet-button" block dark>{{seconds}}
+                                        </v-btn>
                                     </v-flex>
-
 
 
                                 </v-form>
@@ -65,14 +91,15 @@
                         </v-layout>
                     </div>
                 </v-flex>
-                <v-flex md4 sm12 class="pa-5">
+                <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
                               class="team_card" row wrap>
                         <v-flex md4>
-                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px 0" v-bind:src="team_2_img"/>
+                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px 0"
+                                 v-bind:src="team_2_img"/>
                         </v-flex>
-                        <v-flex  md8>
-                            <div >{{team_2_name}}</div>
+                        <v-flex md8>
+                            <div>{{team_2_name}}</div>
                         </v-flex>
 
                     </v-layout>
@@ -81,11 +108,18 @@
         </v-container>
         <v-container fluid style="background-color: #9ccc65; height: 100%">
             <v-layout>
-                <v-flex md9>
-                    <div class="ma-4"><v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
-                        <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn></div>
+                <v-flex md12>
+                    <v-layout>
+                        <v-flex md9 style="background-color: #9e9e9e" class="">
+                            <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
+                            <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
+                        </v-flex>
+                        <v-flex class="text-md-center" style="background-color: aliceblue" md3 class="text-md-right">
+                            <v-text-field label="Match ID" class="ma-4">321</v-text-field>
+                            <v-btn>1ZPlay</v-btn>
+                        </v-flex>
+                    </v-layout>
                 </v-flex>
-
             </v-layout>
         </v-container>
     </v-app>
@@ -121,11 +155,10 @@
                 steam_username: 'admin',
                 permission: 'admin'
             });
-
-
-
         },
         sockets: {
+
+
             bet_msg_from_watcher: function (data) {
                 if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
@@ -139,7 +172,7 @@
                 if (data.team_1_img) this.team_1_img = data.team_1_img;
                 if (data.team_2_img) this.team_2_img = data.team_2_img
             },
-            bet_msg_from_player: function(data) {
+            bet_msg_from_player: function (data) {
                 if (data.timer === true && this.timer === false) this.timer = true
             },
 
@@ -173,7 +206,7 @@
                 });
                 this.seconds = 60;
 
-                let interval = setInterval(()=>{
+                let interval = setInterval(() => {
                     if (this.seconds > 0) {
                         this.seconds--
                     }
