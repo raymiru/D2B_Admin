@@ -4,12 +4,12 @@ module.exports = (io) => {
 
 
     io.on('connection', socket => {
-        console.log('a user connected');
+        console.log('Подключен пользователь');
 
-        socket.on('register', data => {
+        socket.on('login', data => {
             socket.steam_username = data.steam_username;
             if (socket.steam_username in user_list) {
-                console.log('User is already registered ')
+                console.log('Пользователь уже зарегестрирован')
             } else {
                 user_list[socket.steam_username] = data;
                 connectedUsers[socket.steam_username] = socket;
@@ -19,7 +19,7 @@ module.exports = (io) => {
         });
 
         socket.on('disconnect', () => {
-            console.log('user disconnected');
+            console.log('пользователь отключен');
             delete user_list[socket.steam_username];
             delete connectedUsers[socket.steam_username];
         });

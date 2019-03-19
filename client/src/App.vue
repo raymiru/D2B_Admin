@@ -116,7 +116,7 @@
             }
         },
         created() {
-            this.$socket.emit('register', {
+            this.$socket.emit('login', {
                 user_id: 0,
                 steam_username: 'admin',
                 permission: 'admin'
