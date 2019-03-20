@@ -615,29 +615,33 @@
             },
 
             placeBet(e) {
+
                 e.preventDefault();
+                if (this.winner !== 0) {
+                    this.user_list.forEach(element => {
+                        console.log(element)
+                        this.$socket.emit('bet_msg_to_player', {
+                            steam_username: element,
+                            team_winner: this.winner,
+                            bet_val: this.bet_value
+                        })
+                    });
+                    this.seconds = 63;
 
-                this.user_list.forEach(element => {
-                    console.log(element)
-                    this.$socket.emit('bet_msg_to_player', {
-                        steam_username: element,
-                        team_winner: this.winner,
-                        bet_val: this.bet_value
-                    })
-                });
-                this.seconds = 60;
-
-                let interval = setInterval(() => {
-                    if (this.seconds > 0) {
-                        this.seconds--
-                    }
-                }, 1000)
+                    let interval = setInterval(() => {
+                        if (this.seconds > 0) {
+                            this.seconds--
+                        }
+                    }, 1000)
 
 
-                setTimeout(() => {
-                    clearInterval(interval);
-                    this.seconds = 'PLACE BET'
-                }, 60000);
+                    setTimeout(() => {
+                        clearInterval(interval);
+                        this.seconds = 'PLACE BET'
+                    }, 60000);
+                } else alert('НЕ ВЫБРАНА КОМАНДА');
+
+
 
 
             },
