@@ -1,15 +1,15 @@
 <template lang="html">
     <v-app style="background-color: #00bcd4">
-        <v-container fluid style="background-color: whitesmoke;" class="text-md-center">
+        <v-container fluid style="background-color: whitesmoke;" class="text-md-center bet-block">
             <v-layout row wrap>
                 <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(1)"
-                              class="team_card " v-bind:class="{active_team_card: winner === 1}" row wrap>
+                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}" row wrap>
                         <v-flex md8>
                             <div>{{team_1_name}}</div>
                         </v-flex>
                         <v-flex md4>
-                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px -30px"
+                            <img height="200" style="display: block; margin: 40px 100px 300px -30px"
                                  v-bind:src="team_1_img"/>
                         </v-flex>
                     </v-layout>
@@ -20,25 +20,94 @@
                             <!--<v-flex md12>-->
                             <!--<div>{{t_name}}</div>-->
                             <!--</v-flex>-->
-                            <v-flex md12>
-                                <div>{{bo}}</div>
+                            <v-flex md12 >
+                                    <v-layout>
+                                        <v-flex md6 class="text-md-left">
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t1}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t1}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t1}}</li>
+                                            </ul>
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t2}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t2}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t2}}</li>
+                                            </ul>
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t3}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t3}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t3}}</li>
+                                            </ul>
+                                            <ul class="tower"  type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
+                                                <li>&ensp;</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
+                                            </ul>
+                                            <ul class="barrack" type="none">
+                                                <li>{{dota2_scoreboard.radiant.barracks.top.range}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.top.mili}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.middle.range}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.middle.mili}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.bottom.range}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.bottom.mili}}</li>
+                                            </ul>
+                                        </v-flex>
+                                        <v-flex md6 class="text-md-right" style="margin-right: 24px">
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t1}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t1}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t1}}</li>
+                                            </ul>
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t2}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t2}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t2}}</li>
+                                            </ul>
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t3}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t3}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t3}}</li>
+                                            </ul>
+                                            <ul class="tower2"  type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
+                                                <li>&ensp;</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
+                                            </ul>
+                                            <ul class="barrack" type="none">
+                                                <li>{{dota2_scoreboard.dire.barracks.top.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.top.mili}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.middle.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.middle.mili}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.bottom.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.bottom.mili}}</li>
+                                            </ul>
+                                        </v-flex>
+
+                                    </v-layout>
+                            </v-flex>
+                            <v-flex v-if="dota2_scoreboard.finished === true" md12>
+                                <div class="match_result">Finished</div>
+                            </v-flex>
+                            <v-flex v-else md12>
+                                <div class="match_result">Live</div>
                             </v-flex>
                             <v-flex md12>
-                                <div>Finished</div>
+                                <div class="match_result">{{dota2_scoreboard.game_time}}</div>
                             </v-flex>
                             <v-flex md12>
-                                <v-layout >
+                                <v-layout>
                                     <v-flex md3>
-                                        <div class="max_bet">Radiant:</div>
+                                        <div class="radiant_score">{{dota2_scoreboard.radiant.score}}</div>
                                     </v-flex>
                                     <v-flex md3 lg3>
-                                        <div class="max_bet">RLead</div>
+                                        <div class="radiant_gold_lead">{{dota2_scoreboard.radiant.radiant_gold_lead}}
+                                        </div>
                                     </v-flex>
                                     <v-flex md3 lg3>
-                                        <div class="max_bet">Dlead</div>
+                                        <div class="dire_gold_lead">{{dota2_scoreboard.dire.dire_gold_lead}}</div>
                                     </v-flex>
                                     <v-flex md3>
-                                        <div class="max_bet">Dire</div>
+                                        <div class="dire_score">{{dota2_scoreboard.dire.score}}</div>
                                     </v-flex>
                                 </v-layout>
                             </v-flex>
@@ -81,7 +150,8 @@
 
                                     </v-flex>
                                     <v-flex>
-                                        <v-btn type="submit" style="height: 90px; font-size: 26px" class="v-btn--large bet-button" block dark>{{seconds}}
+                                        <v-btn type="submit" style="height: 90px; font-size: 26px"
+                                               class="v-btn--large bet-button" block dark>{{seconds}}
                                         </v-btn>
                                     </v-flex>
 
@@ -93,9 +163,9 @@
                 </v-flex>
                 <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card" row wrap>
+                              class="team_card dire" row wrap>
                         <v-flex md4>
-                            <img alt="q" height="200" style="display: block; margin: 40px 100px 300px 0"
+                            <img height="200" style="display: block; margin: 40px 100px 300px 0"
                                  v-bind:src="team_2_img"/>
                         </v-flex>
                         <v-flex md8>
@@ -115,8 +185,11 @@
                             <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
                         </v-flex>
                         <v-flex class="text-md-center" style="background-color: aliceblue" md3 class="text-md-right">
-                            <v-text-field label="Match ID" class="ma-4">321</v-text-field>
-                            <v-btn>1ZPlay</v-btn>
+                            <v-form
+                                    @submit="sendMatchID">
+                                <v-text-field v-model="match_id" label="Match ID" class="ma-4">321</v-text-field>
+                                <v-btn type="submit">1ZPlay</v-btn>
+                            </v-form>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -126,10 +199,94 @@
 </template>
 
 <script>
+    import {zplaySocket} from "../index";
+
     export default {
         name: 'app',
         data() {
             return {
+                match_id: '',
+                dota2_scoreboard: {
+                    game_time: 0,
+                    win_side: null,
+                    finished: null,
+                    radiant: {
+                        barracks: {
+                            top: {
+                                range: 1,
+                                mili: 1
+                            },
+                            middle: {
+                                range: 1,
+                                mili: 1
+                            },
+                            bottom: {
+                                range: 1,
+                                mili: 1
+                            },
+                        },
+                        towers: {
+                            top: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+                                t4: 1
+                            },
+                            middle: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+
+                            },
+                            bottom: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+                                t4: 1
+                            },
+                        },
+                        score: '?',
+                        radiant_gold_lead: '?'
+                    },
+                    dire: {
+                        barracks: {
+                            top: {
+                                range: 1,
+                                mili: 1
+                            },
+                            middle: {
+                                range: 1,
+                                mili: 1
+                            },
+                            bottom: {
+                                range: 1,
+                                mili: 1
+                            },
+                        },
+                        towers: {
+                            top: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+                                t4: 1
+                            },
+                            middle: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+                                t4: 1
+                            },
+                            bottom: {
+                                t1: 1,
+                                t2: 1,
+                                t3: 1,
+                                t4: 1
+                            },
+                        },
+                        score: '?',
+                        dire_gold_lead: '?'
+                    },
+                },
                 match_url: 'Watcher not started yet',
                 team_1_name: undefined,
                 team_2_name: undefined,
@@ -155,10 +312,246 @@
                 steam_username: 'admin',
                 permission: 'admin'
             });
+
+        },
+
+        mounted() {
+            zplaySocket.on('dota2_scoreboard', data => {
+                console.log(data)
+                if (data.win_side) this.dota2_scoreboard.win_side = data.win_side;
+                this.dota2_scoreboard.finished = data.finished;
+                this.dota2_scoreboard.radiant.score = data.radiant.score
+                if (data.radiant_gold_lead) this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
+                this.dota2_scoreboard.dire.score = data.dire.score;
+                if (data.radiant_gold_lead > 0) {
+                    this.dota2_scoreboard.dire_gold_lead = '--';
+                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead
+                } else {
+                    this.dota2_scoreboard.radiant.radiant_gold_lead = '--';
+                    console.log(`DIRE ${data.radiant_gold_lead}`)
+                    this.dota2_scoreboard.dire.dire_gold_lead = data.radiant_gold_lead * (-1) ;
+                }
+
+                if (data.game_time) {
+                    let date = new Date(null);
+                    date.setSeconds(data.game_time);
+                    this.dota2_scoreboard.game_time = date.toISOString().substr(11, 8);
+                }
+
+
+
+                if (data.radiant.towers[0] === 1) {
+                    this.dota2_scoreboard.radiant.towers.bottom.t4 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.bottom.t4 = '_'
+                }
+
+                if (data.radiant.towers[1] === 1) {
+                    this.dota2_scoreboard.radiant.towers.top.t4 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.top.t4 = '_'
+                }
+
+                if (data.radiant.towers[2] === 1) {
+                    this.dota2_scoreboard.radiant.towers.bottom.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.bottom.t3 = '_'
+                }
+
+                if (data.radiant.towers[3] === 1) {
+                    this.dota2_scoreboard.radiant.towers.bottom.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.bottom.t2 = '_'
+                }
+
+                if (data.radiant.towers[4] === 1) {
+                    this.dota2_scoreboard.radiant.towers.bottom.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.bottom.t1 = '_'
+                }
+
+                if (data.radiant.towers[5] === 1) {
+                    this.dota2_scoreboard.radiant.towers.middle.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.middle.t3 = '_'
+                }
+
+                if (data.radiant.towers[6] === 1) {
+                    this.dota2_scoreboard.radiant.towers.middle.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.middle.t2 = '_'
+                }
+
+                if (data.radiant.towers[7] === 1) {
+                    this.dota2_scoreboard.radiant.towers.middle.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.middle.t1 = '_'
+                }
+
+                if (data.radiant.towers[8] === 1) {
+                    this.dota2_scoreboard.radiant.towers.top.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.top.t3 = '_'
+                }
+
+                if (data.radiant.towers[9] === 1) {
+                    this.dota2_scoreboard.radiant.towers.top.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.top.t2 = '_'
+                }
+
+                if (data.radiant.towers[10] === 1) {
+                    this.dota2_scoreboard.radiant.towers.top.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.radiant.towers.top.t1 = '_'
+                }
+
+                if (data.radiant.barracks[0] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.bottom.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.bottom.mili = '_'
+                }
+
+                if (data.radiant.barracks[1] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.bottom.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.bottom.range = '_'
+                }
+
+                if (data.radiant.barracks[2] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.middle.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.middle.mili = '_'
+                }
+
+                if (data.radiant.barracks[3] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.middle.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.middle.range = '_'
+                }
+
+                if (data.radiant.barracks[4] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.top.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.top.mili = '_'
+                }
+
+                if (data.radiant.barracks[5] === 1) {
+                    this.dota2_scoreboard.radiant.barracks.top.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.radiant.barracks.top.range = '_'
+                }
+
+                //
+                //
+                //
+
+
+                if (data.dire.towers[0] === 1) {
+                    this.dota2_scoreboard.dire.towers.bottom.t4 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.bottom.t4 = '_'
+                }
+
+                if (data.dire.towers[1] === 1) {
+                    this.dota2_scoreboard.dire.towers.top.t4 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.top.t4 = '_'
+                }
+
+                if (data.dire.towers[2] === 1) {
+                    this.dota2_scoreboard.dire.towers.bottom.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.bottom.t3 = '_'
+                }
+
+                if (data.dire.towers[3] === 1) {
+                    this.dota2_scoreboard.dire.towers.bottom.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.bottom.t2 = '_'
+                }
+
+                if (data.dire.towers[4] === 1) {
+                    this.dota2_scoreboard.dire.towers.bottom.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.bottom.t1 = '_'
+                }
+
+                if (data.dire.towers[5] === 1) {
+                    this.dota2_scoreboard.dire.towers.middle.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.middle.t3 = '_'
+                }
+
+                if (data.dire.towers[6] === 1) {
+                    this.dota2_scoreboard.dire.towers.middle.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.middle.t2 = '_'
+                }
+
+                if (data.dire.towers[7] === 1) {
+                    this.dota2_scoreboard.dire.towers.middle.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.middle.t1 = '_'
+                }
+
+                if (data.dire.towers[8] === 1) {
+                    this.dota2_scoreboard.dire.towers.top.t3 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.top.t3 = '_'
+                }
+
+                if (data.dire.towers[9] === 1) {
+                    this.dota2_scoreboard.dire.towers.top.t2 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.top.t2 = '_'
+                }
+
+                if (data.dire.towers[10] === 1) {
+                    this.dota2_scoreboard.dire.towers.top.t1 = '||'
+                } else {
+                    this.dota2_scoreboard.dire.towers.top.t1 = '_'
+                }
+
+                if (data.dire.barracks[0] === 1) {
+                    this.dota2_scoreboard.dire.barracks.bottom.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.bottom.mili = '_'
+                }
+
+                if (data.dire.barracks[1] === 1) {
+                    this.dota2_scoreboard.dire.barracks.bottom.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.bottom.range = '_'
+                }
+
+                if (data.dire.barracks[2] === 1) {
+                    this.dota2_scoreboard.dire.barracks.middle.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.middle.mili = '_'
+                }
+
+                if (data.dire.barracks[3] === 1) {
+                    this.dota2_scoreboard.dire.barracks.middle.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.middle.range = '_'
+                }
+
+                if (data.dire.barracks[4] === 1) {
+                    this.dota2_scoreboard.dire.barracks.top.mili = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.top.mili = '_'
+                }
+
+                if (data.dire.barracks[5] === 1) {
+                    this.dota2_scoreboard.dire.barracks.top.range = '/\\'
+                } else {
+                    this.dota2_scoreboard.dire.barracks.top.range = '_'
+                }
+
+            })
         },
         sockets: {
-
-
             bet_msg_from_watcher: function (data) {
                 if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
@@ -189,6 +582,12 @@
 
 
         methods: {
+            sendMatchID(e) {
+                e.preventDefault();
+                    zplaySocket.open();
+                    zplaySocket.emit('dota2_match', this.match_id)
+            },
+
             chooseWinner(t_winner) {
                 this.winner = t_winner;
             },
@@ -242,8 +641,17 @@
                     console.log(element)
                 })
             },
-
         },
+        watch: {
+            'dota2_scoreboard.win_side': function (data) {
+
+
+                    console.log(data)
+                    document.querySelector(`.${data}`).setAttribute('style', 'background-color: #208ee6');
+                    document.querySelector('.bet-block').setAttribute('style', 'background-color: #cc9e38');
+
+            }
+        }
     }
 </script>
 
@@ -271,5 +679,43 @@
 
     .max_bet {
         font-size: 24px;
+    }
+
+    .radiant_score {
+        background-color: #44803a;
+        color: white;
+    }
+
+    .radiant_gold_lead {
+        background-color: #44803a;
+        color: white;
+    }
+
+    .dire_score {
+        background-color: #803237;
+        color: white;
+    }
+
+    .dire_gold_lead {
+        background-color: #803237;
+        color: white;
+    }
+
+    ul.tower li {
+        display: inline;
+        margin-left: 34px;
+
+    }
+
+    ul.tower2 li {
+        display: inline;
+        margin-right: 34px;
+
+    }
+    ul.barrack li{
+        display: inline;
+        margin-left: 3px;
+        margin-right: 3px;
+
     }
 </style>
