@@ -88,11 +88,15 @@
                             <v-flex v-if="dota2_scoreboard.finished === true" md12>
                                 <div class="match_result">Finished</div>
                             </v-flex>
-                            <v-flex v-else md12>
+                            <v-flex v-else>
                                 <div class="match_result">Live</div>
                             </v-flex>
                             <v-flex md12>
-                                <div class="match_result">{{dota2_scoreboard.game_time}}</div>
+                                <v-layout>
+                                    <v-flex md4><div class="match_result">{{dota2_scoreboard.radiant.team_name}}</div></v-flex>
+                                    <v-flex md4><div class="match_result">{{dota2_scoreboard.game_time}}</div></v-flex>
+                                    <v-flex md4><div class="match_result">{{dota2_scoreboard.dire.team_name}}</div></v-flex>
+                                </v-layout>
                             </v-flex>
                             <v-flex md12>
                                 <v-layout>
@@ -133,15 +137,19 @@
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>0.5
+                                            <v-btn type="button" v-on:click="bet_value = 0.4" class="v-btn--small" fab>0.4
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>0.7
+                                            <v-btn type="button" v-on:click="bet_value = 0.6" class="v-btn--small" fab>0.6
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="setMaxBet" class="v-btn--small" fab>1
+                                            <v-btn type="button" v-on:click="bet_value = 0.8" class="v-btn--small" fab>0.8
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button" v-on:click="bet_value = 1" class="v-btn--small" fab>1
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
@@ -212,6 +220,7 @@
                     win_side: null,
                     finished: null,
                     radiant: {
+                        team_name: 'Radiant',
                         barracks: {
                             top: {
                                 range: 1,
@@ -250,6 +259,7 @@
                         radiant_gold_lead: '?'
                     },
                     dire: {
+                        team_name: 'Dire',
                         barracks: {
                             top: {
                                 range: 1,
@@ -324,6 +334,8 @@
                 this.dota2_scoreboard.radiant.score = data.radiant.score
                 if (data.radiant_gold_lead) this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
                 this.dota2_scoreboard.dire.score = data.dire.score;
+                this.dota2_scoreboard.radiant.team_name = data.radiant_team.name;
+                this.dota2_scoreboard.dire.team_name = data.dire_team.name;
                 if (data.radiant_gold_lead > 0) {
                     this.dota2_scoreboard.dire_gold_lead = '--';
                     this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead
@@ -585,8 +597,19 @@
         methods: {
             openZPlaySocket(e) {
                 e.preventDefault();
+
+                const conn = () => {
                     zplaySocket.open();
-                    zplaySocket.emit('dota2_match', this.match_id)
+                    zplaySocket.emit('dota2_match', this.match_id);
+                    setTimeout(() => {
+                        zplaySocket.close();
+                        conn();
+                        console.log('conn')
+                    },2000);
+                }
+
+                conn();
+
             },
             closeZPlaySocket(e) {
                 e.preventDefault();
