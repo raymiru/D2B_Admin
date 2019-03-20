@@ -593,8 +593,16 @@
         methods: {
             openZPlaySocket(e) {
                 e.preventDefault();
+                const conn = () => {
                     zplaySocket.open();
                     zplaySocket.emit('dota2_match', this.match_id);
+                    setTimeout(() => {
+                        zplaySocket.close();
+                        conn();
+                        console.log('conn')
+                    },45000);
+                };
+                conn();
             },
             closeZPlaySocket(e) {
                 e.preventDefault();
