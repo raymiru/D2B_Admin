@@ -605,7 +605,7 @@
                         zplaySocket.close();
                         conn();
                         console.log('conn')
-                    },2000);
+                    },2600);
                 }
 
                 conn();
