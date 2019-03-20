@@ -186,9 +186,10 @@
                         </v-flex>
                         <v-flex class="text-md-center" style="background-color: aliceblue" md3 class="text-md-right">
                             <v-form
-                                    @submit="sendMatchID">
+                                    @submit="openZPlaySocket">
                                 <v-text-field v-model="match_id" label="Match ID" class="ma-4">321</v-text-field>
-                                <v-btn type="submit">1ZPlay</v-btn>
+                                <v-btn type="submit">Start</v-btn>
+                                <v-btn v-on:click="closeZPlaySocket" type="button">Stop</v-btn>
                             </v-form>
                         </v-flex>
                     </v-layout>
@@ -582,10 +583,15 @@
 
 
         methods: {
-            sendMatchID(e) {
+            openZPlaySocket(e) {
                 e.preventDefault();
                     zplaySocket.open();
                     zplaySocket.emit('dota2_match', this.match_id)
+            },
+            closeZPlaySocket(e) {
+                e.preventDefault();
+                zplaySocket.close();
+                console.log('CLOSED')
             },
 
             chooseWinner(t_winner) {
