@@ -4,7 +4,7 @@
             <v-layout row wrap>
                 <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(1)"
-                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}" row wrap>
+                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
                         <v-flex md8>
                             <div>{{team_1_name}}</div>
                         </v-flex>
@@ -12,6 +12,12 @@
                             <img height="200" style="display: block; margin: 40px 100px 300px -30px"
                                  v-bind:src="team_1_img"/>
                         </v-flex>
+                    </v-layout>
+                    <v-layout>
+                            <v-flex md12 ma-4  class="text-md-center">
+                                <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
+                                <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
+                            </v-flex>
                     </v-layout>
                 </v-flex>
                 <v-flex md4 sm4>
@@ -171,7 +177,7 @@
                 </v-flex>
                 <v-flex md4 sm4 class="">
                     <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card dire" row wrap>
+                              class="team_card dire">
                         <v-flex md4>
                             <img height="200" style="display: block; margin: 40px 100px 300px 0"
                                  v-bind:src="team_2_img"/>
@@ -179,23 +185,12 @@
                         <v-flex md8>
                             <div>{{team_2_name}}</div>
                         </v-flex>
-
                     </v-layout>
-                </v-flex>
-            </v-layout>
-        </v-container>
-        <v-container fluid style="background-color: #9ccc65; height: 100%">
-            <v-layout>
-                <v-flex md12>
                     <v-layout>
-                        <v-flex md9 style="background-color: #9e9e9e" class="">
-                            <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
-                            <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
-                        </v-flex>
-                        <v-flex class="text-md-center" style="background-color: aliceblue" md3 class="text-md-right">
+                        <v-flex md12 class="text-md-center" class="text-md-right">
                             <v-form
                                     @submit="openZPlaySocket">
-                                <v-text-field v-model="match_id" label="Match ID" class="ma-4">321</v-text-field>
+                                <v-text-field v-model="match_id" label="1ZPlay Match ID" class="ma-4">321</v-text-field>
                                 <v-btn type="submit">Start</v-btn>
                                 <v-btn v-on:click="closeZPlaySocket" type="button">Stop</v-btn>
                             </v-form>
@@ -204,6 +199,7 @@
                 </v-flex>
             </v-layout>
         </v-container>
+
     </v-app>
 </template>
 
@@ -690,7 +686,9 @@
     }
 
     .team_card {
+        box-shadow: 0 5px 10px #4e5869;
         height: 300px;
+        border-radius: 5px;
         background-color: #c9ccc3;
         cursor: pointer;
         font-size: 36px;
