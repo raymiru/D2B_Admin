@@ -1,253 +1,309 @@
 <template lang="html">
-    <v-app style="background-color: #00bcd4">
-        <v-container fluid style="background-color: whitesmoke;" class="text-md-center bet-block">
-            <v-layout row wrap>
-                <v-flex md4 sm4>
-                    <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(1)"
-                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
-                        <v-flex md8>
-                            <div>{{team_1_name}}</div>
-                        </v-flex>
-                        <v-flex md4>
-                            <img height="200" style="display: block; margin: 40px 100px 300px -30px"
-                                 v-bind:src="team_1_img"/>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(2)"
-                              v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card dire">
+    <v-app v-if="user === 'RayMiru'" style="background-color: #00bcd4">
+        <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher app dark class="primary lighten-3">
+            <v-list>
+                <v-list-group v-for="item in items" :value="item.active" :key="item.title">
+                    <v-list-tile slot="item"
+                                 :to="item.path == '#' ? '' : item.path"
+                                 :exact="item.exact"
+                                 class="yellow--text"
+                                 active-class="red--text">
+                        <v-list-tile-action>
+                            <v-icon>{{ 1 }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title >{{ 2}}</v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action v-if="item.items.length > 0">
+                            <v-icon>keyboard_arrow_down</v-icon>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list-group>
+            </v-list>
+        </v-navigation-drawer>
+        <v-toolbar fixed app :clipped-left="clipped">
+            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-title v-if="team_1_name && team_2_name">
+                {{team_1_name}} vs {{team_2_name}}
+            </v-toolbar-title>
+            <v-toolbar-title v-else>
+                Match 1
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn icon>
+                <v-icon>more_vert</v-icon>
+            </v-btn>
+        </v-toolbar>
+        <v-content>
+            <v-container  fluid style="background-color: whitesmoke;" class="text-md-center bet-block">
+                <v-layout row wrap>
+                    <v-flex md4 sm4 style="margin-top: 17px">
+                        <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(1)"
+                                  class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
+                            <v-flex md8>
+                                <div>{{team_1_name}}</div>
+                            </v-flex>
+                            <v-flex md4>
+                                <img height="200" style="display: block; margin: 40px 100px 300px -30px"
+                                     v-bind:src="team_1_img"/>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(2)"
+                                  v-bind:class="{active_team_card: winner === 2}"
+                                  class="team_card dire">
 
-                        <v-flex md8>
-                            <div>{{team_2_name}}</div>
-                        </v-flex>
-                        <v-flex md4>
-                            <img height="200" style="display: block; margin: 40px 100px 300px -30px"
-                                 v-bind:src="team_2_img"/>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout>
-                        <v-flex md12 ma-4 class="text-md-center">
-                            <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
-                            <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
-                            <span class="mx-3">|</span>
-                            <v-label>{{reverseTeams}}
-                                <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
-                            </v-label>
-                        </v-flex>
-                    </v-layout>
-                </v-flex>
+                            <v-flex md8>
+                                <div>{{team_2_name}}</div>
+                            </v-flex>
+                            <v-flex md4>
+                                <img height="200" style="display: block; margin: 40px 100px 300px -30px"
+                                     v-bind:src="team_2_img"/>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
+                            <v-flex md12 ma-3 class="text-md-center">
+                                <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
+                                <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
+                                <span class="mx-3">|</span>
+                                <v-label>{{reverseTeams}}
+                                    <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
+                                </v-label>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
 
-                <v-flex md4 sm4>
-                    <div class="pa-3">
-                        <v-layout row wrap>
-                            <!--<v-flex md12>-->
-                            <!--<div>{{t_name}}</div>-->
-                            <!--</v-flex>-->
-                            <v-flex md12>
-                                <v-layout>
-                                    <v-flex md6 class="text-md-left">
-                                        <ul class="tower" type="none">
-                                            <li>{{dota2_scoreboard.radiant.towers.top.t1}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.middle.t1}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.bottom.t1}}</li>
-                                        </ul>
-                                        <ul class="tower" type="none">
-                                            <li>{{dota2_scoreboard.radiant.towers.top.t2}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.middle.t2}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.bottom.t2}}</li>
-                                        </ul>
-                                        <ul class="tower" type="none">
-                                            <li>{{dota2_scoreboard.radiant.towers.top.t3}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.middle.t3}}</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.bottom.t3}}</li>
-                                        </ul>
-                                        <ul class="tower" type="none">
-                                            <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
-                                            <li>&ensp;</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
-                                        </ul>
-                                        <ul class="barrack" type="none">
-                                            <li>{{dota2_scoreboard.radiant.barracks.top.range}}</li>
-                                            <li>{{dota2_scoreboard.radiant.barracks.top.mili}}</li>
-                                            <li>{{dota2_scoreboard.radiant.barracks.middle.range}}</li>
-                                            <li>{{dota2_scoreboard.radiant.barracks.middle.mili}}</li>
-                                            <li>{{dota2_scoreboard.radiant.barracks.bottom.range}}</li>
-                                            <li>{{dota2_scoreboard.radiant.barracks.bottom.mili}}</li>
-                                        </ul>
-                                    </v-flex>
-                                    <v-flex md6 class="text-md-right" style="margin-right: 24px">
-                                        <ul class="tower2" type="none">
-                                            <li>{{dota2_scoreboard.dire.towers.top.t1}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.middle.t1}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.bottom.t1}}</li>
-                                        </ul>
-                                        <ul class="tower2" type="none">
-                                            <li>{{dota2_scoreboard.dire.towers.top.t2}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.middle.t2}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.bottom.t2}}</li>
-                                        </ul>
-                                        <ul class="tower2" type="none">
-                                            <li>{{dota2_scoreboard.dire.towers.top.t3}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.middle.t3}}</li>
-                                            <li>{{dota2_scoreboard.dire.towers.bottom.t3}}</li>
-                                        </ul>
-                                        <ul class="tower2" type="none">
-                                            <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
-                                            <li>&ensp;</li>
-                                            <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
-                                        </ul>
-                                        <ul class="barrack" type="none">
-                                            <li>{{dota2_scoreboard.dire.barracks.top.range}}</li>
-                                            <li>{{dota2_scoreboard.dire.barracks.top.mili}}</li>
-                                            <li>{{dota2_scoreboard.dire.barracks.middle.range}}</li>
-                                            <li>{{dota2_scoreboard.dire.barracks.middle.mili}}</li>
-                                            <li>{{dota2_scoreboard.dire.barracks.bottom.range}}</li>
-                                            <li>{{dota2_scoreboard.dire.barracks.bottom.mili}}</li>
-                                        </ul>
-                                    </v-flex>
+                    <v-flex md4 sm4>
+                        <div >
+                            <v-layout ma-2 row wrap>
+                                <!--<v-flex md12>-->
+                                <!--<div>{{t_name}}</div>-->
+                                <!--</v-flex>-->
+                                <v-flex md12 ma-2>
+                                    <v-layout>
+                                        <v-flex md6 class="text-md-center radiant-map">
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t1}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t1}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t1}}</li>
+                                            </ul>
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t2}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t2}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t2}}</li>
+                                            </ul>
+                                            <ul class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t3}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.middle.t3}}</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t3}}</li>
+                                            </ul>
+                                            <ul  class="tower" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
+                                                <li>&ensp;</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
+                                            </ul>
+                                            <ul class="barrack" type="none">
+                                                <li>{{dota2_scoreboard.radiant.barracks.top.range}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.top.mili}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.middle.range}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.middle.mili}}</li>
+                                                <li>{{dota2_scoreboard.radiant.barracks.bottom.range}}</li>
+                                                <li >{{dota2_scoreboard.radiant.barracks.bottom.mili}}</li>
+                                            </ul>
+                                        </v-flex>
+                                        <v-flex md6 class="text-md-center dire-map">
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t1}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t1}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t1}}</li>
+                                            </ul>
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t2}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t2}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t2}}</li>
+                                            </ul>
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.dire.towers.top.t3}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.middle.t3}}</li>
+                                                <li>{{dota2_scoreboard.dire.towers.bottom.t3}}</li>
+                                            </ul>
+                                            <ul class="tower2" type="none">
+                                                <li>{{dota2_scoreboard.radiant.towers.top.t4}}</li>
+                                                <li>&ensp;</li>
+                                                <li>{{dota2_scoreboard.radiant.towers.bottom.t4}}</li>
+                                            </ul>
+                                            <ul class="barrack" type="none">
+                                                <li>{{dota2_scoreboard.dire.barracks.top.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.top.mili}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.middle.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.middle.mili}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.bottom.range}}</li>
+                                                <li>{{dota2_scoreboard.dire.barracks.bottom.mili}}</li>
+                                            </ul>
+                                        </v-flex>
 
-                                </v-layout>
+                                    </v-layout>
+                                </v-flex>
+
+                                <v-flex md12>
+                                    <v-layout>
+                                        <v-flex md4 pa-2>
+                                            <div class="match_result radiant_score">{{dota2_scoreboard.radiant.team_name}}</div>
+                                        </v-flex>
+                                        <v-flex md4 pa-2>
+                                            <div class="match_result time">{{dota2_scoreboard.game_time}}</div>
+                                        </v-flex>
+                                        <v-flex md4 pa-2>
+                                            <div class="match_result dire_score">{{dota2_scoreboard.dire.team_name}}</div>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-flex>
+                                <v-flex md12>
+                                    <v-layout pa-2>
+                                        <v-flex md3>
+                                            <div class="radiant_score">{{dota2_scoreboard.radiant.score}}</div>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <div class="radiant_gold_lead">{{dota2_scoreboard.radiant.radiant_gold_lead}}
+                                            </div>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <div class="dire_gold_lead">{{dota2_scoreboard.dire.dire_gold_lead}}</div>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <div class="dire_score">{{dota2_scoreboard.dire.score}}</div>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-flex>
+                                <v-flex md6 pa-2>
+                                    <div class="odds">{{team_1_odds}}</div>
+                                </v-flex>
+                                <v-flex md6 pa-2>
+                                    <div class="odds">{{team_2_odds}}</div>
+                                </v-flex>
+                                <v-flex md12>
+                                    <v-form
+                                            @submit="placeBet"
+                                            row wrap
+                                    >
+                                        <v-flex class="ma-3" md12 d-inline-flex>
+
+
+                                            <v-flex>
+                                                <v-text-field
+                                                        style="font-size: 28px"
+                                                        v-model="bet_value"
+                                                        label="BET VALUE"
+                                                ></v-text-field>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-btn type="button" v-on:click="bet_value = 0.4" class="v-btn--small" fab>
+                                                    0.4
+                                                </v-btn>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-btn type="button" v-on:click="bet_value = 0.6" class="v-btn--small" fab>
+                                                    0.6
+                                                </v-btn>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-btn type="button" v-on:click="bet_value = 0.8" class="v-btn--small" fab>
+                                                    0.8
+                                                </v-btn>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-btn type="button" v-on:click="bet_value = 1" class="v-btn--small" fab>1
+                                                </v-btn>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-btn type="button" v-on:click="setMaxBet" fab>{{max_bet}}</v-btn>
+                                            </v-flex>
+
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-layout>
+                                                <v-flex v-if="!place_bet_pressed" md12>
+                                                    <v-btn  type="submit"
+                                                            style="height: 60px; font-size: 26px"
+                                                            class="v-btn--large bet-button" block dark>PLACE BET
+                                                    </v-btn>
+                                                </v-flex >
+                                                <v-flex v-else-if="place_bet_pressed">
+                                                    <v-layout>
+                                                        <v-flex md9>
+                                                            <v-btn  type="button"
+                                                                    style="height: 60px; font-size: 26px"
+                                                                    class="v-btn--large  disable-events"  block dark >{{seconds}}
+                                                            </v-btn>
+                                                        </v-flex>
+                                                        <v-flex md3>
+
+                                                            <v-btn style="height: 60px; font-size: 16px"
+                                                                   v-on:click="removeTimer"
+                                                                   dark
+                                                                   type="button">Remove Timer</v-btn>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                </v-flex>
+                                            </v-layout>
+
+                                        </v-flex>
+
+
+                                    </v-form>
+                                </v-flex>
+                            </v-layout>
+                        </div>
+                    </v-flex>
+                    <v-flex md4 sm4 style="margin-top: 17px">
+                        <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(2)"
+                                  v-bind:class="{active_team_card: winner === 2}"
+                                  class="team_card dire">
+                            <v-flex md4>
+                                <img height="200" style="display: block; margin: 40px 100px 300px 0"
+                                     v-bind:src="team_2_img"/>
                             </v-flex>
-                            <v-flex v-if="dota2_scoreboard.finished === true" md12>
-                                <div class="match_result">Finished</div>
+                            <v-flex md8>
+                                <div>{{team_2_name}}</div>
                             </v-flex>
-                            <v-flex v-else>
-                                <div class="match_result">Live</div>
+                        </v-layout>
+                        <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(1)"
+                                  class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
+
+                            <v-flex md4>
+                                <img height="200" style="display: block; margin: 40px 100px 300px 0"
+                                     v-bind:src="team_1_img"/>
                             </v-flex>
-                            <v-flex md12>
-                                <v-layout>
-                                    <v-flex md4>
-                                        <div class="match_result">{{dota2_scoreboard.radiant.team_name}}</div>
-                                    </v-flex>
-                                    <v-flex md4>
-                                        <div class="match_result">{{dota2_scoreboard.game_time}}</div>
-                                    </v-flex>
-                                    <v-flex md4>
-                                        <div class="match_result">{{dota2_scoreboard.dire.team_name}}</div>
-                                    </v-flex>
-                                </v-layout>
+                            <v-flex md8>
+                                <div>{{team_1_name}}</div>
                             </v-flex>
-                            <v-flex md12>
-                                <v-layout>
-                                    <v-flex md3>
-                                        <div class="radiant_score">{{dota2_scoreboard.radiant.score}}</div>
-                                    </v-flex>
-                                    <v-flex md3 lg3>
-                                        <div class="radiant_gold_lead">{{dota2_scoreboard.radiant.radiant_gold_lead}}
-                                        </div>
-                                    </v-flex>
-                                    <v-flex md3 lg3>
-                                        <div class="dire_gold_lead">{{dota2_scoreboard.dire.dire_gold_lead}}</div>
-                                    </v-flex>
-                                    <v-flex md3>
-                                        <div class="dire_score">{{dota2_scoreboard.dire.score}}</div>
-                                    </v-flex>
-                                </v-layout>
-                            </v-flex>
-                            <v-flex md6 pa-3>
-                                <div class="odds">{{team_1_odds}}</div>
-                            </v-flex>
-                            <v-flex md6 pa-3>
-                                <div class="odds">{{team_2_odds}}</div>
-                            </v-flex>
-                            <v-flex md12>
+                        </v-layout>
+                        <v-layout>
+                            <v-flex md12 ma-3 class="text-md-center" >
+
                                 <v-form
-                                        @submit="placeBet"
-                                        row wrap
-                                >
-                                    <v-flex class="ma-4" md12 d-inline-flex>
+                                        @submit="openZPlaySocket">
 
+                                    <v-text-field v-model="match_id" label="ZPLAY MAIN" class="ma-2"></v-text-field>
+                                    <v-label> &#8194; &#8194;Main
+                                        <v-btn type="submit">Start</v-btn>
+                                    </v-label>
+                                    <v-btn v-on:click="closeZPlaySocket" type="button">Stop</v-btn>
 
-                                        <v-flex>
-                                            <v-text-field
-                                                    style="font-size: 28px"
-                                                    v-model="bet_value"
-                                                    label="BET VALUE"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = 0.4" class="v-btn--small" fab>
-                                                0.4
-                                            </v-btn>
-                                        </v-flex>
-                                        <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = 0.6" class="v-btn--small" fab>
-                                                0.6
-                                            </v-btn>
-                                        </v-flex>
-                                        <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = 0.8" class="v-btn--small" fab>
-                                                0.8
-                                            </v-btn>
-                                        </v-flex>
-                                        <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = 1" class="v-btn--small" fab>1
-                                            </v-btn>
-                                        </v-flex>
-                                        <v-flex>
-                                            <v-btn type="button" v-on:click="setMaxBet" fab>{{max_bet}}</v-btn>
-                                        </v-flex>
-
-                                    </v-flex>
-                                    <v-flex>
-                                        <v-btn type="submit" style="height: 90px; font-size: 26px"
-                                               class="v-btn--large bet-button" block dark>{{seconds}}
-                                        </v-btn>
-                                    </v-flex>
-
+                                </v-form>
+                                <v-form
+                                        @submit="openZPlaySocketReverse">
+                                    <v-label>Reserve
+                                        <v-btn type="submit">Start</v-btn>
+                                    </v-label>
+                                    <v-btn v-on:click="closeZPlaySocketReserve" type="button">Stop</v-btn>
 
                                 </v-form>
                             </v-flex>
                         </v-layout>
-                    </div>
-                </v-flex>
-                <v-flex md4 sm4>
-                    <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(2)"
-                              v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card dire">
-                        <v-flex md4>
-                            <img height="200" style="display: block; margin: 40px 100px 300px 0"
-                                 v-bind:src="team_2_img"/>
-                        </v-flex>
-                        <v-flex md8>
-                            <div>{{team_2_name}}</div>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(1)"
-                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
-
-                        <v-flex md4>
-                            <img height="200" style="display: block; margin: 40px 100px 300px 0"
-                                 v-bind:src="team_1_img"/>
-                        </v-flex>
-                        <v-flex md8>
-                            <div>{{team_1_name}}</div>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout>
-                        <v-flex md12 class="text-md-center" class="text-md-right">
-                            <br/>
-                            <v-form
-                                    @submit="openZPlaySocket">
-
-                                <v-text-field v-model="match_id" label="ZPLAY MAIN" class="ma-2"></v-text-field>
-                                <v-btn type="submit">Start</v-btn>
-                                <v-btn v-on:click="closeZPlaySocket" type="button">Stop</v-btn>
-
-                            </v-form>
-                            <v-form
-                                    @submit="openZPlaySocketReverse">
-                                <v-text-field v-model="match_id" label="ZPLAY RESERVE" class="ma-2"></v-text-field>
-                                <v-btn type="submit">Start</v-btn>
-                                <v-btn v-on:click="closeZPlaySocketReserve" type="button">Stop</v-btn>
-
-                            </v-form>
-                        </v-flex>
-                    </v-layout>
-                </v-flex>
-            </v-layout>
-        </v-container>
-
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-content>
     </v-app>
 </template>
 
@@ -255,10 +311,14 @@
     import {zplaySocket} from "../index";
     import {zplaySocketReserve} from '../index'
 
+
     export default {
         name: 'app',
         data() {
             return {
+                drawer: false,
+                clipped: false,
+                user: localStorage['user'],
                 reverseTeams: false,
                 match_id: '',
                 dota2_scoreboard: {
@@ -358,7 +418,9 @@
                 winner: 0,
                 bet_value: undefined,
                 timer: false,
-                seconds: 'PLACE BET',
+                place_bet_pressed: false,
+                seconds: 0,
+                intervals: [],
                 bet_button: false,
                 user_list: []
             }
@@ -373,6 +435,15 @@
         },
 
         mounted() {
+
+
+            if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0 ) {
+                this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
+            }
+            if (this.dota2_scoreboard.dire.dire_gold_lead < 0) {
+                this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
+            }
+
             const zplayData = data => {
                 console.log(data)
                 if (data.win_side) this.dota2_scoreboard.win_side = data.win_side;
@@ -383,12 +454,11 @@
                 this.dota2_scoreboard.radiant.team_name = data.radiant_team.name;
                 this.dota2_scoreboard.dire.team_name = data.dire_team.name;
                 if (data.radiant_gold_lead > 0) {
-                    this.dota2_scoreboard.dire_gold_lead = '--';
-                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead
-                } else {
-                    this.dota2_scoreboard.radiant.radiant_gold_lead = '--';
-                    console.log(`DIRE ${data.radiant_gold_lead}`)
+                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
                     this.dota2_scoreboard.dire.dire_gold_lead = data.radiant_gold_lead * (-1);
+                } else {
+                    this.dota2_scoreboard.dire.dire_gold_lead = data.radiant_gold_lead * (-1);
+                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
                 }
 
                 if (data.game_time) {
@@ -671,34 +741,44 @@
             },
 
             placeBet(e) {
-
                 e.preventDefault();
-                if (this.winner !== 0) {
+                if (this.winner && this.bet_value) {
+                    console.log('placeBet pressed')
+                    this.place_bet_pressed = true;
+                    this.seconds = 61;
+                    this.timerOn();
+
                     this.user_list.forEach(element => {
-                        console.log(element)
                         this.$socket.emit('bet_msg_to_player', {
                             steam_username: element,
                             team_winner: this.winner,
                             bet_val: this.bet_value
                         })
                     });
-                    this.seconds = 63;
 
-                    let interval = setInterval(() => {
-                        if (this.seconds > 0) {
-                            this.seconds--
-                        }
-                    }, 1000)
-
-
-                    setTimeout(() => {
-                        clearInterval(interval);
-                        this.seconds = 'PLACE BET'
-                    }, 60000);
-                } else alert('НЕ ВЫБРАНА КОМАНДА');
-
-
+                } else alert('НЕ ВЫБРАНА КОМАНДА ИЛИ НЕ ВВЕДЕНА СУММА СТАВКИ');
             },
+            timerOn() {
+
+                console.log('TIMER')
+
+                    let interval = setInterval( () => {
+                        if (this.seconds > 0) {
+                            this.seconds--;
+                        } else {
+                            console.log(this.seconds)
+                            clearInterval(interval);
+                            this.place_bet_pressed = false;
+                        }
+                    }, 1000);
+                this.intervals.push(interval)
+            },
+
+            removeTimer() {
+              this.intervals.forEach(clearInterval);
+              this.place_bet_pressed = false
+            },
+
             setMaxBet() {
                 console.log('MAX BET')
                 this.bet_value = this.max_bet
@@ -730,6 +810,16 @@
                 document.querySelector(`.${data}`).setAttribute('style', 'background-color: #208ee6');
                 document.querySelector('.bet-block').setAttribute('style', 'background-color: #cc9e38');
 
+            },
+            'dota2_scoreboard.dire.dire_gold_lead': function () {
+                if (this.dota2_scoreboard.dire.dire_gold_lead < 0) {
+                    this.dota2_scoreboard.dire.dire_gold_lead = '--'
+                }
+            },
+            'dota2_scoreboard.radiant.radiant_gold_lead': function () {
+                if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0) {
+                    this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
+                }
             }
         }
     }
@@ -737,11 +827,11 @@
 
 <style lang="css">
     #app {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .team_card {
-        box-shadow: 0 5px 10px #4e5869;
+        box-shadow: 0 3px 10px #4e5869;
         height: 300px;
         border-radius: 5px;
         background-color: #c9ccc3;
@@ -750,13 +840,23 @@
         line-height: 8em;
     }
 
+
+
     .active_team_card {
-        background-color: #338037;
+        background-color: #ffcb00;
+    }
+
+
+    .bet-button {
+        height: 120px;
+        font-size: 26px
     }
 
     .odds {
+        border-radius: 5px;
         background-color: #c9ccc3;
         font-size: 28px;
+        box-shadow: 0 3px 6px #4e5869;
     }
 
     .max_bet {
@@ -764,34 +864,66 @@
     }
 
     .radiant_score {
+        border-radius: 5px;
         background-color: #44803a;
         color: white;
+        box-shadow: 0 3px 6px #4e5869;
+    }
+
+    .radiant-map {
+        border-radius: 5px;
+        background-color: #44803a;
+        color: white;
+        box-shadow: 0 3px 6px #4e5869;
     }
 
     .radiant_gold_lead {
+        border-radius: 5px;
         background-color: #44803a;
         color: white;
+        box-shadow: 0 3px 6px #4e5869;
     }
 
     .dire_score {
+        border-radius: 5px;
         background-color: #803237;
+        color: white;
+        box-shadow: 0 3px 6px #4e5869;
+    }
+
+    .time {
+        border-radius: 5px;
+        background-color: #3129cc;
+        box-shadow: 0 3px 6px #4e5869;
         color: white;
     }
 
-    .dire_gold_lead {
+    .dire-map {
+        border-radius: 5px;
         background-color: #803237;
         color: white;
+        box-shadow: 0 3px 6px #4e5869;
+
+    }
+
+    .dire_gold_lead {
+        border-radius: 5px;
+        background-color: #803237;
+        color: white;
+        box-shadow: 0 3px 6px #4e5869;
     }
 
     ul.tower li {
         display: inline;
-        margin-left: 34px;
+        margin-left: 10px;
+        margin-right: 10px;
 
     }
 
     ul.tower2 li {
         display: inline;
-        margin-right: 34px;
+        margin-right: 10px;
+        margin-left: 10px;
 
     }
 
@@ -800,5 +932,10 @@
         margin-left: 3px;
         margin-right: 3px;
 
+    }
+
+    .disable-events {
+        pointer-events: none;
+        opacity: 0.6;
     }
 </style>
