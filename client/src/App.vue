@@ -2,8 +2,8 @@
     <v-app style="background-color: #00bcd4">
         <v-container fluid style="background-color: whitesmoke;" class="text-md-center bet-block">
             <v-layout row wrap>
-                <v-flex md4 sm4 class="">
-                    <v-layout v-on:click="chooseWinner(1)"
+                <v-flex md4 sm4 >
+                    <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(1)"
                               class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
                         <v-flex md8>
                             <div>{{team_1_name}}</div>
@@ -13,6 +13,17 @@
                                  v-bind:src="team_1_img"/>
                         </v-flex>
                     </v-layout>
+                    <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
+                              class="team_card dire">
+
+                        <v-flex md8>
+                            <div>{{team_2_name}}</div>
+                        </v-flex>
+                        <v-flex md4>
+                            <img height="200" style="display: block; margin: 40px 100px 300px -30px"
+                                 v-bind:src="team_2_img"/>
+                        </v-flex>
+                    </v-layout>
                     <v-layout>
                             <v-flex md12 ma-4  class="text-md-center">
                                 <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
@@ -20,6 +31,7 @@
                             </v-flex>
                     </v-layout>
                 </v-flex>
+
                 <v-flex md4 sm4>
                     <div class="pa-3">
                         <v-layout row wrap>
@@ -175,8 +187,8 @@
                         </v-layout>
                     </div>
                 </v-flex>
-                <v-flex md4 sm4 class="">
-                    <v-layout v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
+                <v-flex md4 sm4>
+                    <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(2)" v-bind:class="{active_team_card: winner === 2}"
                               class="team_card dire">
                         <v-flex md4>
                             <img height="200" style="display: block; margin: 40px 100px 300px 0"
@@ -186,6 +198,17 @@
                             <div>{{team_2_name}}</div>
                         </v-flex>
                     </v-layout>
+                    <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(1)"
+                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
+
+                        <v-flex md4>
+                            <img height="200" style="display: block; margin: 40px 100px 300px 0"
+                                 v-bind:src="team_1_img"/>
+                        </v-flex>
+                        <v-flex md8>
+                            <div>{{team_1_name}}</div>
+                        </v-flex>
+                    </v-layout>
                     <v-layout>
                         <v-flex md12 class="text-md-center" class="text-md-right">
                             <v-form
@@ -193,6 +216,11 @@
                                 <v-text-field v-model="match_id" label="1ZPlay Match ID" class="ma-4">321</v-text-field>
                                 <v-btn type="submit">Start</v-btn>
                                 <v-btn v-on:click="closeZPlaySocket" type="button">Stop</v-btn>
+                                <span class="mx-3"> | </span>
+                                <v-label>Reverse
+                                    <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">{{reverseTeams}}</v-btn>
+                                </v-label>
+
                             </v-form>
                         </v-flex>
                     </v-layout>
@@ -210,6 +238,7 @@
         name: 'app',
         data() {
             return {
+                reverseTeams: false,
                 match_id: '',
                 dota2_scoreboard: {
                     game_time: 0,
@@ -294,7 +323,7 @@
                         dire_gold_lead: '?'
                     },
                 },
-                match_url: 'Watcher not started yet',
+                match_url: '',
                 team_1_name: undefined,
                 team_2_name: undefined,
                 team_1_img: undefined,
