@@ -12,6 +12,12 @@ export const zplaySocket = io('http://1zplay.com:8080', {
         autoConnect: false
     }
 );
+export const zplaySocketReserve = io('http://1zplay.com:8080', {
+        transports: ['websocket'],
+        autoConnect: false
+    }
+);
+
 
 
 Vue.use(Vuetify);
