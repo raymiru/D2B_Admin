@@ -137,11 +137,17 @@
                                     </v-flex>
                                 </v-layout>
                             </v-flex>
-                            <v-flex md6 pa-2>
+                            <v-flex md6 pa-2 v-if="!reverseTeams">
                                 <div class="odds">{{team_1_odds}}</div>
                             </v-flex>
-                            <v-flex md6 pa-2>
+                            <v-flex md6 pa-2 v-else="reverseTeams">
                                 <div class="odds">{{team_2_odds}}</div>
+                            </v-flex>
+                            <v-flex md6 pa-2 v-if="!reverseTeams">
+                                <div class="odds">{{team_2_odds}}</div>
+                            </v-flex>
+                            <v-flex md6 pa-2 v-else="reverseTeams">
+                                <div class="odds">{{team_1_odds}}</div>
                             </v-flex>
                             <v-flex md12>
                                 <v-form

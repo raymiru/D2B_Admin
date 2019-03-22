@@ -1,5 +1,5 @@
 <template>
-    <v-app id="app" v-if="user === 'RayMiru'" style="background-color: #00bcd4">
+    <v-app id="app" v-if="user === 'RayMiru'" style="background-color: whitesmoke">
         <Header></Header>
         <keep-alive>
             <router-view></router-view>
