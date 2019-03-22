@@ -4,7 +4,7 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css'
 import VueSocketIO from 'vue-socket.io'
 import {setHost} from "./config";
-import router from './router'
+import {router} from './router/router'
 
 
 
