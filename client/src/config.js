@@ -10,3 +10,4 @@ export const setHost = () => {
         return host.prod
     }
 };
+

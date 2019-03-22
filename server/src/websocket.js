@@ -1,5 +1,5 @@
 module.exports = (io) => {
-    let user_list = {};
+    let user_list = [];
     let connectedUsers = {};
 
 
@@ -10,11 +10,11 @@ module.exports = (io) => {
             socket.steam_username = data.steam_username;
             if (socket.steam_username in user_list) {
                 console.log('Пользователь уже зарегестрирован')
+                console.log(data)
             } else {
                 user_list[socket.steam_username] = data;
                 connectedUsers[socket.steam_username] = socket;
                 console.log(user_list);
-                updateUserList();
             }
         });
 
@@ -22,17 +22,11 @@ module.exports = (io) => {
             console.log('пользователь отключен');
             delete user_list[socket.steam_username];
             delete connectedUsers[socket.steam_username];
+            console.log(user_list)
         });
 
-        function updateUserList() {
-            io.sockets.emit('user_list', user_list);
-        }
 
-        socket.on('user_list', () => {
-            connectedUsers['admin'].emit('user_list', () => {
-                user_list
-            })
-        });
+
 
         socket.on('bet_msg_to_player', msg => {
             try {
@@ -83,7 +77,20 @@ module.exports = (io) => {
             } catch (e) {
                 console.log('Admin page not loaded')
             }
-        })
+        });
+
+        socket.on('player_info_update', msg => {
+           console.log('Update info from player')
+            console.log(msg)
+            try {
+                connectedUsers['admin'].emit('player_info_update', {
+                    steam_username: msg.steam_username,
+                    bank: msg.bank
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        });
 
         socket.on('url_handler', msg => {
             console.log('URL HANDLER');
