@@ -389,7 +389,7 @@
                 seconds: 0,
                 intervals: [],
                 bet_button: false,
-                user_list: ['prokhorov15', 'bodsalamh', 'maxmeedge', 'zizigrant', 'mrzlo322' ]
+                user_list: []
             }
         },
         created() {
@@ -402,6 +402,9 @@
         },
 
         mounted() {
+            for (let i= 0; i <20; i++) {
+                this.user_list[i] = localStorage[i];
+            }
             console.log(this.user_list)
             this.user_list.forEach(elem => {
                 console.log(elem)
