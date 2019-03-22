@@ -7,6 +7,7 @@ import {setHost} from "./config";
 import router from './router'
 
 
+
 Vue.use(Vuetify);
 Vue.use(new VueSocketIO({
     debug: true,
