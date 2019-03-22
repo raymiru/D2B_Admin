@@ -383,7 +383,7 @@
                 seconds: 0,
                 intervals: [],
                 bet_button: false,
-                user_list: []
+                user_list: ['prokhorov15', 'bodsalamh', 'maxmeedge', 'zizigrant', 'mrzlo322' ]
             }
         },
         created() {
@@ -396,7 +396,10 @@
         },
 
         mounted() {
-
+            console.log(this.user_list)
+            this.user_list.forEach(elem => {
+                console.log(elem)
+            })
 
             if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0) {
                 this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
@@ -663,13 +666,13 @@
 
             user_list: function (data) {
                 this.user_list = data.user_list
-                // let count = 0
-                // for (let prop in data) {
-                //     if (data[prop].permission === "player") {
-                //         this.user_list[count] = data[prop].steam_username;
-                //         count++;
-                //     }
-                // }
+                let count = 0
+                for (let prop in data) {
+                    if (data[prop].permission === "player") {
+                        this.user_list[count] = data[prop].steam_username;
+                        count++;
+                    }
+                }
             }
         },
 
@@ -758,7 +761,7 @@
                 })
             },
             userList() {
-                console.log(user_list)
+                console.log(this.user_list)
             },
         },
         watch: {
