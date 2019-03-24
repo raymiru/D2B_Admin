@@ -930,6 +930,7 @@
 
                 console.log(data)
                 document.querySelector('#app > div.application--wrap > main').classList.remove('gradient')
+                document.querySelector(`.${data}`).setAttribute('style', 'background-color: #208ee6');
 
             },
             'dota2_scoreboard.dire.dire_gold_lead': function () {
