@@ -25,7 +25,7 @@
                     </v-layout>
                     <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(2)"
                               v-bind:class="{active_team_card: winner === 2}"
-                              class="team_card dire">
+                              class="team_card radiant">
 
                         <v-flex md8>
                             <div>{{team_2_name}}</div>
@@ -254,7 +254,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout v-else-if="reverseTeams === true" v-on:click="chooseWinner(1)"
-                              class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
+                              class="team_card dire" v-bind:class="{active_team_card: winner === 1}">
 
                         <v-flex md4>
                             <img height="180" style="display: block; margin: 0 100px 300px 0"
@@ -930,7 +930,6 @@
 
                 console.log(data)
                 document.querySelector('#app > div.application--wrap > main').classList.remove('gradient')
-                document.querySelector(`.${data}`).setAttribute('style', 'background-color: #208ee6');
 
             },
             'dota2_scoreboard.dire.dire_gold_lead': function () {
