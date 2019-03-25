@@ -15,6 +15,18 @@ module.exports = (io) => {
                 user_list[socket.steam_username] = data;
                 connectedUsers[socket.steam_username] = socket;
                 console.log(user_list);
+                if (socket.steam_username === 'admin') {
+                    try {
+                        connectedUsers['admin'].emit('player_info_update', {
+                            steam_username: msg.steam_username,
+                            player_id: msg.player_id,
+                            permission: msg.permission,
+                            bank: msg.bank
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }
             }
         });
 
