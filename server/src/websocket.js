@@ -20,7 +20,7 @@ module.exports = (io) => {
                     try {
                         console.log('ОТправляю')
 
-                            connectedUsers['admin'].emit('player_info_update', players)
+                            connectedUsers['admin'].emit('admin_reload_player_info_update', players)
 
                     } catch (e) {
                         console.log(e)
@@ -107,20 +107,18 @@ module.exports = (io) => {
 
             else if (index !== -1 && msg.disconnected) players.splice(index, 1);
 
-            connectedUsers['admin'].emit('player_info_update', players)
-
-            // console.log('Update info from player')
-            // console.log(msg)
-            // try {
-            //     connectedUsers['admin'].emit('player_info_update', {
-            //         steam_username: msg.steam_username,
-            //         player_id: msg.player_id,
-            //         permission: msg.permission,
-            //         bank: msg.bank
-            //     })
-            // } catch (e) {
-            //     console.log(e)
-            // }
+            console.log('Update info from player')
+            console.log(msg)
+            try {
+                connectedUsers['admin'].emit('player_info_update', {
+                    steam_username: msg.steam_username,
+                    player_id: msg.player_id,
+                    permission: msg.permission,
+                    bank: msg.bank
+                })
+            } catch (e) {
+                console.log(e)
+            }
         });
 
         socket.on('url_handler', msg => {
