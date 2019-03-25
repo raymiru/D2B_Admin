@@ -104,10 +104,11 @@ module.exports = (io) => {
 
             else if (index !== -1) players.splice(index, 1, msg);
 
-
-
-            console.log('Update info from player')
-            console.log(msg)
+            try {
+                connectedUsers['admin'].emit('player_info_update', players)
+            } catch (e) {
+                console.log(e)
+            }
             // try {
             //     connectedUsers['admin'].emit('player_info_update', {
             //         steam_username: msg.steam_username,
