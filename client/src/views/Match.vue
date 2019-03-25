@@ -1,5 +1,5 @@
 <template lang="html">
-    <v-content class="gradient">
+    <v-content>
         <div >
             <v-alert
                     :value="dota2_scoreboard.win_side"
@@ -289,46 +289,46 @@
                     </v-layout>
                 </v-flex>
             </v-layout>
-            <!--<v-flex>-->
-                <!--<v-layout row wrap style="margin-top: 20px">-->
-                    <!--<v-flex class="ma-2">-->
-                        <!--<v-data-table-->
-                                <!--:headers="headers"-->
-                                <!--:items="desserts"-->
-                                <!--class="elevation-1"-->
-                        <!--&gt;-->
-                            <!--<template v-slot:items="props">-->
-                                <!--<td>{{ props.item.name }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
-                            <!--</template>-->
-                        <!--</v-data-table>-->
-                    <!--</v-flex>-->
-                    <!--<v-flex class="ma-2">-->
-                        <!--<v-data-table-->
-                                <!--:headers="headers"-->
-                                <!--:items="desserts"-->
-                                <!--class="elevation-1"-->
-                        <!--&gt;-->
-                            <!--<template v-slot:items="props">-->
-                                <!--<td>{{ props.item.name }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
-                            <!--</template>-->
-                        <!--</v-data-table>-->
-                    <!--</v-flex>-->
-                <!--</v-layout>-->
-            <!--</v-flex>-->
+            <v-flex>
+                <v-layout row wrap style="margin-top: 20px">
+                    <v-flex class="ma-2">
+                        <v-data-table
+                                :headers="headers"
+                                :items="desserts"
+                                class="elevation-1"
+                        >
+                            <template v-slot:items="props">
+                                <td>{{ props.item.name }}</td>
+                                <td class="text-xs-right">{{ props.item.calories }}</td>
+                                <td class="text-xs-right">{{ props.item.calories }}</td>
+                                <td class="text-xs-right">{{ props.item.calories }}</td>
+                                <td class="text-xs-right">{{ props.item.fat }}</td>
+                                <td class="text-xs-right">{{ props.item.fat }}</td>
+                                <td class="text-xs-right">{{ props.item.fat }}</td>
+                                <td class="text-xs-right">{{ props.item.carbs }}</td>
+                                <td class="text-xs-right">{{ props.item.protein }}</td>
+                                <td class="text-xs-right">{{ props.item.iron }}</td>
+                            </template>
+                        </v-data-table>
+                    </v-flex>
+                    <v-flex class="ma-2">
+                        <v-data-table
+                                :headers="headers"
+                                :items="desserts"
+                                class="elevation-1"
+                        >
+                            <template v-slot:items="props">
+                                <td>{{ props.item.name }}</td>
+                                <td class="text-xs-right">{{ props.item.calories }}</td>
+                                <td class="text-xs-right">{{ props.item.fat }}</td>
+                                <td class="text-xs-right">{{ props.item.carbs }}</td>
+                                <td class="text-xs-right">{{ props.item.protein }}</td>
+                                <td class="text-xs-right">{{ props.item.iron }}</td>
+                            </template>
+                        </v-data-table>
+                    </v-flex>
+                </v-layout>
+            </v-flex>
         </v-container>
     </v-content>
 </template>
@@ -446,6 +446,7 @@
                 intervals: [],
                 bet_button: false,
                 user_list: [],
+
                 headers: [
                     {
                         text: 'Radiant',
@@ -543,14 +544,10 @@
                 ]
             }
         },
-        created() {
-            this.$socket.emit('login', {
-                user_id: 0,
-                steam_username: 'admin',
-                permission: 'admin'
-            });
-
+        props: {
+          players: Array
         },
+
 
         mounted() {
             for (let i= 0; i <20; i++) {
@@ -807,6 +804,8 @@
 
         },
         sockets: {
+
+
             bet_msg_from_watcher: function (data) {
                 if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
@@ -910,11 +909,11 @@
                 this.$socket.emit('dota2_match', 4545430533)
             },
             urlHandler() {
-                console.log('URL HANDLER')
-                this.user_list.forEach(element => {
-                    console.log(element)
+                console.log('URL HANDLER: ');
+                this.players.forEach(element => {
+                    console.log(element.steam_username);
                     this.$socket.emit('url_handler', {
-                        steam_username: element,
+                        steam_username: element.steam_username,
                         match_url: this.match_url
 
                     })
@@ -929,7 +928,7 @@
 
 
                 console.log(data)
-                document.querySelector('#app > div.application--wrap > main').classList.remove('gradient')
+                document.querySelector('#app > div.application--wrap > main').classList.add('gradient');
                 document.querySelector(`.${data}`).setAttribute('style', 'background-color: #208ee6');
 
             },

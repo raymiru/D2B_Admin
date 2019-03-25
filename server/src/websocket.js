@@ -20,8 +20,17 @@ module.exports = (io) => {
 
         socket.on('disconnect', () => {
             console.log('пользователь отключен');
+            try {
+                connectedUsers['admin'].emit('player_info_update', {
+                    steam_username: socket.steam_username,
+                    disconnected: true
+                })
+            } catch (e) {
+                console.log(e)
+            }
             delete user_list[socket.steam_username];
             delete connectedUsers[socket.steam_username];
+
             console.log(user_list)
         });
 
@@ -85,6 +94,8 @@ module.exports = (io) => {
             try {
                 connectedUsers['admin'].emit('player_info_update', {
                     steam_username: msg.steam_username,
+                    player_id: msg.player_id,
+                    permission: msg.permission,
                     bank: msg.bank
                 })
             } catch (e) {
