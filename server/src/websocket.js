@@ -6,10 +6,9 @@ module.exports = (io) => {
     io.on('connection', socket => {
         console.log('Подключен пользователь');
 
-        socket.on('login', msg => {
-            socket.steam_username = msg.steam_username;
+        socket.on('login', data => {
+            socket.steam_username = data.steam_username;
             if (socket.steam_username in user_list) {
-
                 console.log('Пользователь уже зарегестрирован')
                 console.log(data)
             } else {
@@ -90,7 +89,7 @@ module.exports = (io) => {
         });
 
         socket.on('player_info_update', msg => {
-           console.log('Update info from player')
+            console.log('Update info from player')
             console.log(msg)
             try {
                 connectedUsers['admin'].emit('player_info_update', {
@@ -116,3 +115,4 @@ module.exports = (io) => {
         })
     });
 };
+
