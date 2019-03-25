@@ -20,7 +20,9 @@ module.exports = (io) => {
                     try {
                         console.log('ОТправляю')
 
-                            connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+
+                                connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+
 
                     } catch (e) {
                         console.log(e)
@@ -98,11 +100,8 @@ module.exports = (io) => {
             }
         });
 
-        socket.on('admin_reload_player_info_update', msg => {
+        socket.on('player_info_update', msg => {
             let index = players.findIndex(e => e.steam_username === msg.steam_username);
-
-
-
 
             try {
                 if (index === -1) {
