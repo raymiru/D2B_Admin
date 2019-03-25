@@ -9,6 +9,16 @@ module.exports = (io) => {
         socket.on('login', data => {
             socket.steam_username = data.steam_username;
             if (socket.steam_username in user_list) {
+                try {
+                    connectedUsers['admin'].emit('player_info_update', {
+                        steam_username: msg.steam_username,
+                        player_id: msg.player_id,
+                        permission: msg.permission,
+                        bank: msg.bank
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
                 console.log('Пользователь уже зарегестрирован')
                 console.log(data)
             } else {
