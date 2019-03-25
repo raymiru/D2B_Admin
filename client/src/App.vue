@@ -28,7 +28,7 @@
                 let index = this.players.findIndex(e => e.steam_username === data.steam_username);
                 if (index === -1 && !data.disconnected) this.players.push(data);
                 else if (index !== -1 && !data.disconnected) this.players.splice(index, 1, data);
-                else if (data.disconnected) this.players.splice(index, 1)
+                else if (index !== -1 && data.disconnected) this.players.splice(index, 1)
             },
 
         },
