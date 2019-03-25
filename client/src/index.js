@@ -37,7 +37,10 @@ Vue.use(Vuetify);
 
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: setHost()
+    connection: setHost(),
+    options: {
+        transport: ['websocket']
+    }
 }));
 
 new Vue({
