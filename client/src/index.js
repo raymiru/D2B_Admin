@@ -5,9 +5,29 @@ import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css'
 import VueSocketIO from 'vue-socket.io'
 import {setHost} from "./config";
-import router from 'router'
 
 
+
+console.log(host.dev);
+
+const router =  new Router({
+    routes: [
+        {
+            path: '/match',
+            component: () => import("./views/Match"),
+            props: true
+        },
+        {
+            path: '/players',
+            component: () => import('./views/Players'),
+            props: true
+        },
+
+        {
+            path: '/', redirect: '/match'
+        }
+    ]
+});
 
 
 
