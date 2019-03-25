@@ -59,7 +59,7 @@
                 this.players.forEach(elem => {
                     summ += parseFloat(elem.bank)
                 });
-                return summ
+                return summ.toFixed(2)
             }
         }
     }
