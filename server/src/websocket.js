@@ -18,15 +18,7 @@ module.exports = (io) => {
                 console.log(user_list);
                 if (socket.steam_username === 'admin') {
                     try {
-                        console.log('ОТправляю')
-
-
                         connectedUsers['admin'].emit('admin_reload_player_info_update', players)
-
-
-                        setTimeout( () => {
-                            connectedUsers['admin'].emit('admin_reload_player_info_update', players)
-                        }, 2000);
                     } catch (e) {
                         console.log(e)
                     }
@@ -36,7 +28,9 @@ module.exports = (io) => {
 
         socket.on('disconnect', () => {
             let index = players.findIndex(e => e.steam_username === socket.steam_username);
-            if (index !== -1) {players.splice(index, 1);}
+            if (index !== -1) {
+                players.splice(index, 1);
+            }
 
             console.log('пользователь отключен')
             try {
@@ -49,8 +43,6 @@ module.exports = (io) => {
 
             console.log(user_list)
         });
-
-
 
 
         socket.on('bet_msg_to_player', msg => {
@@ -89,7 +81,7 @@ module.exports = (io) => {
         socket.on('bet_msg_from_player', msg => {
             console.log(msg);
             try {
-                connectedUsers['admin'].emit('bet_msg_from_player',{
+                connectedUsers['admin'].emit('bet_msg_from_player', {
                     bank: msg.bank,
                     place_summ_t1: msg.place_summ_t1,
                     place_summ_t2: msg.place_summ_t2,
