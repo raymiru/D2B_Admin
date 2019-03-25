@@ -8,7 +8,7 @@ import {setHost} from "./config";
 
 
 
-console.log(host.dev);
+
 
 const router =  new Router({
     routes: [
