@@ -19,11 +19,9 @@ module.exports = (io) => {
                 if (socket.steam_username === 'admin') {
                     try {
                         console.log('ОТправляю')
-
-
-                                connectedUsers['admin'].emit('admin_reload_player_info_update', players)
-
-
+                        setTimeout( () => {
+                            connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+                        }, 2000);
                     } catch (e) {
                         console.log(e)
                     }
