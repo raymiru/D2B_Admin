@@ -100,12 +100,19 @@ module.exports = (io) => {
 
         socket.on('admin_reload_player_info_update', msg => {
             let index = players.findIndex(e => e.steam_username === msg.steam_username);
-            if (index === -1) players.push(msg);
 
-            else if (index !== -1) players.splice(index, 1, msg);
+
+
 
             try {
-                connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+                if (index === -1) {
+                    players.push(msg);
+                    connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+                } else if (index !== -1) {
+                    players.splice(index, 1, msg);
+                    connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+                }
+
             } catch (e) {
                 console.log(e)
             }
