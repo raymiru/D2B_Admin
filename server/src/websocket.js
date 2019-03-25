@@ -1,6 +1,7 @@
 module.exports = (io) => {
     let user_list = [];
     let connectedUsers = {};
+    let players = [];
 
 
     io.on('connection', socket => {
@@ -17,12 +18,10 @@ module.exports = (io) => {
                 console.log(user_list);
                 if (socket.steam_username === 'admin') {
                     try {
-                        connectedUsers['admin'].emit('player_info_update', {
-                            steam_username: data.steam_username,
-                            player_id: data.player_id,
-                            permission: data.permission,
-                            bank: data.bank
-                        })
+                        console.log('ОТправляю')
+
+                            connectedUsers['admin'].emit('player_info_update', players)
+
                     } catch (e) {
                         console.log(e)
                     }
@@ -101,18 +100,27 @@ module.exports = (io) => {
         });
 
         socket.on('player_info_update', msg => {
-            console.log('Update info from player')
-            console.log(msg)
-            try {
-                connectedUsers['admin'].emit('player_info_update', {
-                    steam_username: msg.steam_username,
-                    player_id: msg.player_id,
-                    permission: msg.permission,
-                    bank: msg.bank
-                })
-            } catch (e) {
-                console.log(e)
-            }
+            let index = players.findIndex(e => e.steam_username === msg.steam_username);
+            if (index === -1 && !msg.disconnected) players.push(msg);
+
+            else if (index !== -1 && !msg.disconnected) players.splice(index, 1, msg);
+
+            else if (index !== -1 && msg.disconnected) players.splice(index, 1);
+
+            connectedUsers['admin'].emit('player_info_update', players)
+
+            // console.log('Update info from player')
+            // console.log(msg)
+            // try {
+            //     connectedUsers['admin'].emit('player_info_update', {
+            //         steam_username: msg.steam_username,
+            //         player_id: msg.player_id,
+            //         permission: msg.permission,
+            //         bank: msg.bank
+            //     })
+            // } catch (e) {
+            //     console.log(e)
+            // }
         });
 
         socket.on('url_handler', msg => {
