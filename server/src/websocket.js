@@ -19,6 +19,11 @@ module.exports = (io) => {
                 if (socket.steam_username === 'admin') {
                     try {
                         console.log('ОТправляю')
+
+
+                        connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+
+
                         setTimeout( () => {
                             connectedUsers['admin'].emit('admin_reload_player_info_update', players)
                         }, 2000);
@@ -30,20 +35,19 @@ module.exports = (io) => {
         });
 
         socket.on('disconnect', () => {
-           if (socket.steam_username !== 'admin') {
-               let index = players.findIndex(e => e.steam_username === socket.steam_username);
-               players.splice(index, 1);
-               console.log('пользователь отключен')
-               try {
-                   connectedUsers['admin'].emit('admin_reload_player_info_update', players)
-               } catch (e) {
-                   console.log(e)
-               }
-               delete user_list[socket.steam_username];
-               delete connectedUsers[socket.steam_username];
+            let index = players.findIndex(e => e.steam_username === socket.steam_username);
+            if (index !== -1) {players.splice(index, 1);}
 
-               console.log(user_list)
-           }
+            console.log('пользователь отключен')
+            try {
+                connectedUsers['admin'].emit('admin_reload_player_info_update', players)
+            } catch (e) {
+                console.log(e)
+            }
+            delete user_list[socket.steam_username];
+            delete connectedUsers[socket.steam_username];
+
+            console.log(user_list)
         });
 
 
@@ -139,4 +143,5 @@ module.exports = (io) => {
         })
     });
 };
+
 
