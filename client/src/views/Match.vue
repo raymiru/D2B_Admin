@@ -37,12 +37,11 @@
                     </v-layout>
                     <v-layout>
                         <v-flex md12 ma-3 class="text-md-center">
-                            <v-btn type="button" v-on:click="urlHandler" fab class="v-btn--large">URL</v-btn>
-                            <v-btn v-on:click="userList()" class="ma-4">User-list</v-btn>
+                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large"><v-icon dark >refresh</v-icon></v-btn>
                             <span class="mx-3">|</span>
-                            <v-label>{{reverseTeams}}
+
                                 <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
-                            </v-label>
+
                         </v-flex>
                     </v-layout>
                 </v-flex>

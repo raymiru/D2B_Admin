@@ -1,37 +1,23 @@
 <template>
-   <nav>
-       <v-navigation-drawer :clipped="clipped" v-model="drawer" enable-resize-watcher app >
-           <v-toolbar >
-               <v-list>
-                   <v-list-tile :to="'/'">
-                       <v-list-tile-title class="title">
-                           DOTA2 BETS
-                       </v-list-tile-title>
-                   </v-list-tile>
-               </v-list>
-           </v-toolbar>
+    <v-toolbar dark >
 
-           <v-divider></v-divider>
-           <v-list dense class="pt-0">
-               <v-list-tile
-                       v-for="item in items"
-                       :key="item.title"
-                       :to="item.path"
-               >
-                   <v-list-tile-content>
-                       <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                   </v-list-tile-content>
-               </v-list-tile>
-           </v-list>
-       </v-navigation-drawer>
-       <v-toolbar fixed app :clipped-left="clipped">
-           <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-           <v-spacer></v-spacer>
-           <v-btn icon>
-               <v-icon>more_vert</v-icon>
-           </v-btn>
-       </v-toolbar>
-   </nav>
+        <v-toolbar-title class="white--text" to="/"><v-list-tile to="/">D2BETS</v-list-tile></v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-list-tile dark icon to="/match">MATCH
+
+        </v-list-tile>
+
+        <v-list-tile icon to="/players">
+            ACCOUNTS
+        </v-list-tile>
+
+        <v-btn icon>
+            <v-icon>refresh</v-icon>
+        </v-btn>
+
+    </v-toolbar>
 </template>
 
 <script>
