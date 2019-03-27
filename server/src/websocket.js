@@ -4,6 +4,8 @@ module.exports = (io) => {
     let players = [];
 
 
+
+
     io.on('connection', socket => {
         console.log('Подключен пользователь');
 
@@ -47,6 +49,7 @@ module.exports = (io) => {
 
         socket.on('bet_msg_to_player', msg => {
             try {
+                console.log(msg)
                 connectedUsers[msg.steam_username].emit('bet_msg_to_player', {
                     team_winner: msg.team_winner,
                     bet_val: msg.bet_val
@@ -97,6 +100,7 @@ module.exports = (io) => {
         });
 
         socket.on('player_info_update', msg => {
+            console.log(msg)
             let index = players.findIndex(e => e.steam_username === msg.steam_username);
 
             try {

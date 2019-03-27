@@ -1,6 +1,6 @@
 <template lang="html">
     <v-content>
-        <div >
+        <div>
             <v-alert
                     :value="dota2_scoreboard.win_side"
                     dismissible
@@ -12,7 +12,7 @@
         </div>
         <v-container fluid style="background: linear-gradient(left, #F2C14E, #F78154);" class="text-md-center">
             <v-layout row wrap>
-                <v-flex md4 sm4 >
+                <v-flex md4 sm4>
                     <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(1)"
                               class="team_card radiant" v-bind:class="{active_team_card: winner === 1}">
                         <v-flex md8>
@@ -37,10 +37,12 @@
                     </v-layout>
                     <v-layout>
                         <v-flex md12 ma-3 class="text-md-center">
-                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large"><v-icon dark >refresh</v-icon></v-btn>
+                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large">
+                                <v-icon dark>refresh</v-icon>
+                            </v-btn>
                             <span class="mx-3">|</span>
 
-                                <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
+                            <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
 
                         </v-flex>
                     </v-layout>
@@ -49,7 +51,7 @@
                 <v-flex md4 sm4>
                     <div>
                         <v-layout style="margin: -8px 8px !important;" row wrap>
-                            <v-flex md12 ma-2 >
+                            <v-flex md12 ma-2>
                                 <v-layout>
                                     <v-flex md6 class="text-md-center radiant-map">
                                         <ul class="tower" type="none">
@@ -135,11 +137,14 @@
                                         <div class="radiant_score">{{dota2_scoreboard.radiant.score}}</div>
                                     </v-flex>
                                     <v-flex md3>
-                                        <div style="color: #f9ff21" class="radiant_gold_lead">{{dota2_scoreboard.radiant.radiant_gold_lead}}
+                                        <div style="color: #f9ff21" class="radiant_gold_lead">
+                                            {{dota2_scoreboard.radiant.radiant_gold_lead}}
                                         </div>
                                     </v-flex>
                                     <v-flex md3>
-                                        <div style="color: #f9ff21" class="dire_gold_lead">{{dota2_scoreboard.dire.dire_gold_lead}}</div>
+                                        <div style="color: #f9ff21" class="dire_gold_lead">
+                                            {{dota2_scoreboard.dire.dire_gold_lead}}
+                                        </div>
                                     </v-flex>
                                     <v-flex md3>
                                         <div class="dire_score">{{dota2_scoreboard.dire.score}}</div>
@@ -174,32 +179,44 @@
                                             ></v-text-field>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = (max_bet*0.2).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')" class="v-btn--small" fab>
+                                            <v-btn type="button"
+                                                   v-on:click="bet_value = (max_bet*0.2).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   class="v-btn--small" fab>
                                                 {{(max_bet*0.2).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = (max_bet*0.3).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')" class="v-btn--small" fab>
+                                            <v-btn type="button"
+                                                   v-on:click="bet_value = (max_bet*0.3).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   class="v-btn--small" fab>
                                                 {{(max_bet*0.3).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = (max_bet*0.4).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')" class="v-btn--small" fab>
+                                            <v-btn type="button"
+                                                   v-on:click="bet_value = (max_bet*0.4).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   class="v-btn--small" fab>
                                                 {{(max_bet*0.4).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = (max_bet*0.6).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')" class="v-btn--small" fab>
+                                            <v-btn type="button"
+                                                   v-on:click="bet_value = (max_bet*0.6).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   class="v-btn--small" fab>
                                                 {{(max_bet*0.6).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" v-on:click="bet_value = (max_bet*0.8).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')" class="v-btn--small" fab>
+                                            <v-btn type="button"
+                                                   v-on:click="bet_value = (max_bet*0.8).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   class="v-btn--small" fab>
                                                 {{(max_bet*0.8).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn dark type="button" style="font-size: 18px" v-on:click="setMaxBet" fab>{{max_bet}}</v-btn>
+                                            <v-btn dark type="button" style="font-size: 18px" v-on:click="setMaxBet"
+                                                   fab>{{max_bet}}
+                                            </v-btn>
                                         </v-flex>
 
                                     </v-flex>
@@ -438,7 +455,7 @@
                 bo: 'bo_info',
                 max_bet: 0,
                 winner: 0,
-                bet_value: undefined,
+                bet_value: 0,
                 timer: false,
                 place_bet_pressed: false,
                 seconds: 0,
@@ -453,11 +470,11 @@
                         sortable: false,
                         value: 'name'
                     },
-                    { text: 'Calories', value: 'calories' },
-                    { text: 'Fat (g)', value: 'fat' },
-                    { text: 'Carbs (g)', value: 'carbs' },
-                    { text: 'Protein (g)', value: 'protein' },
-                    { text: 'Iron (%)', value: 'iron' }
+                    {text: 'Calories', value: 'calories'},
+                    {text: 'Fat (g)', value: 'fat'},
+                    {text: 'Carbs (g)', value: 'carbs'},
+                    {text: 'Protein (g)', value: 'protein'},
+                    {text: 'Iron (%)', value: 'iron'}
                 ],
                 desserts: [
                     {
@@ -544,12 +561,12 @@
             }
         },
         props: {
-          players: Array
+            players: Array
         },
 
 
         mounted() {
-            for (let i= 0; i <20; i++) {
+            for (let i = 0; i < 20; i++) {
                 this.user_list[i] = localStorage[i];
             }
             console.log(this.user_list)
@@ -864,18 +881,46 @@
             },
 
             placeBet(e) {
+                const randomBet = bet_value => {
+                    let arr;
+                    let rand;
+                    let betTotal;
+                    if (bet_value < this.max_bet && bet_value > 0.17) {
+                        console.log('>0.17')
+                        arr = [-0.01, 0, 0.01]
+                        rand = Math.floor(Math.random() * arr.length);
+                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
+                        return betTotal
+                    } else if (bet_value < this.max_bet && bet_value > 0.3) {
+                        console.log('>0.3')
+                        arr = [-0.2, -0.1, 0, 0.1]
+                        rand = Math.floor(Math.random() * arr.length);
+                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
+                        return betTotal
+                    } else if (bet_value < this.max_bet && bet_value > 0.7) {
+                        console.log('>0.7')
+                        arr = [-0.2, -0.1, 0, 0.1, 0.2]
+                        rand = Math.floor(Math.random() * arr.length);
+                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
+                        return betTotal
+                    } else {
+                        return bet_value
+                    }
+                };
+
                 e.preventDefault();
-                if (this.winner && this.bet_value) {
-                    console.log('placeBet pressed')
+                if (this.winner && this.bet_value!== 0) {
+                    console.log('placeBet pressed');
                     this.place_bet_pressed = true;
                     this.seconds = 61;
                     this.timerOn();
 
-                    this.user_list.forEach(element => {
+                    this.players.forEach(element => {
+
                         this.$socket.emit('bet_msg_to_player', {
-                            steam_username: element,
+                            steam_username: element.steam_username,
                             team_winner: this.winner,
-                            bet_val: this.bet_value
+                            bet_val: randomBet(this.bet_value)
                         })
                     });
 
@@ -923,6 +968,10 @@
             },
         },
         watch: {
+            max_bet: function () {
+              this.bet_value = 0
+            },
+
             'dota2_scoreboard.win_side': function (data) {
 
 
@@ -967,21 +1016,20 @@
         background-color: #d99b58;
         /* IE9, iOS 3.2+ */
         background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0idnNnZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIHN0b3AtY29sb3I9IiNjYTUyNTIiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIwIi8+PHN0b3Agc3RvcC1jb2xvcj0iI2U3ZTQ1ZSIgc3RvcC1vcGFjaXR5PSIxIiBvZmZzZXQ9IjEiLz48L2xpbmVhckdyYWRpZW50PjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjdnNnZykiIC8+PC9zdmc+);
-        background-image: -webkit-gradient(linear, 0% 0%, 100% 100%,color-stop(0, rgb(202, 82, 82)),color-stop(1, rgb(231, 228, 94)));
+        background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0, rgb(202, 82, 82)), color-stop(1, rgb(231, 228, 94)));
         /* Android 2.3 */
-        background-image: -webkit-repeating-linear-gradient(top left,rgb(202, 81, 82) -0.8%,rgb(231, 228, 94) 100%);
+        background-image: -webkit-repeating-linear-gradient(top left, rgb(202, 81, 82) -0.8%, rgb(231, 228, 94) 100%);
         /* IE10+ */
-        background-image: repeating-linear-gradient(to bottom right,rgb(202, 81, 82) -0.8%,rgb(231, 228, 94) 100%);
-        background-image: -ms-repeating-linear-gradient(top left,rgb(202, 81, 82) -0.8%,rgb(231, 228, 94) 100%);
+        background-image: repeating-linear-gradient(to bottom right, rgb(202, 81, 82) -0.8%, rgb(231, 228, 94) 100%);
+        background-image: -ms-repeating-linear-gradient(top left, rgb(202, 81, 82) -0.8%, rgb(231, 228, 94) 100%);
     }
 
     /* IE8- CSS hack */
     @media \0screen\,screen\9 {
         .gradient {
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffca5152",endColorstr="#ffe7e45e",GradientType=0);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffca5152", endColorstr="#ffe7e45e", GradientType=0);
         }
     }
-
 
 
     .bet-button {
@@ -1081,23 +1129,20 @@
         background-color: #72959a;
         /* IE9, iOS 3.2+ */
         background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZpZXdCb3g9IjAgMCAxIDEiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxsaW5lYXJHcmFkaWVudCBpZD0idnNnZyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSIxNi45JSIgeTE9IjEwOC4xJSIgeDI9IjgzLjElIiB5Mj0iLTguMSUiPjxzdG9wIHN0b3AtY29sb3I9IiNkZmM4YmEiIHN0b3Atb3BhY2l0eT0iMSIgb2Zmc2V0PSIwIi8+PHN0b3Agc3RvcC1jb2xvcj0iIzAzNjA3OCIgc3RvcC1vcGFjaXR5PSIxIiBvZmZzZXQ9IjEiLz48L2xpbmVhckdyYWRpZW50PjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjdnNnZykiIC8+PC9zdmc+);
-        background-image: -webkit-gradient(linear, 16.9% 108.1%, 83.1% -8.1%,color-stop(0, rgb(223, 200, 186)),color-stop(1, rgb(3, 96, 120)));
+        background-image: -webkit-gradient(linear, 16.9% 108.1%, 83.1% -8.1%, color-stop(0, rgb(223, 200, 186)), color-stop(1, rgb(3, 96, 120)));
         /* Android 2.3 */
-        background-image: -webkit-repeating-linear-gradient(63deg,rgb(225, 201, 187) -0.8%,rgb(3, 96, 120) 100%);
+        background-image: -webkit-repeating-linear-gradient(63deg, rgb(225, 201, 187) -0.8%, rgb(3, 96, 120) 100%);
         /* IE10+ */
-        background-image: repeating-linear-gradient(27deg,rgb(225, 201, 187) -0.8%,rgb(3, 96, 120) 100%);
-        background-image: -ms-repeating-linear-gradient(63deg,rgb(225, 201, 187) -0.8%,rgb(3, 96, 120) 100%);
+        background-image: repeating-linear-gradient(27deg, rgb(225, 201, 187) -0.8%, rgb(3, 96, 120) 100%);
+        background-image: -ms-repeating-linear-gradient(63deg, rgb(225, 201, 187) -0.8%, rgb(3, 96, 120) 100%);
     }
 
     /* IE8- CSS hack */
     @media \0screen\,screen\9 {
         .gradient {
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff036078",endColorstr="#ffe1c9bb",GradientType=0);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff036078", endColorstr="#ffe1c9bb", GradientType=0);
         }
     }
-
-
-
 
 
 </style>

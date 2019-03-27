@@ -13,14 +13,17 @@
                             <template v-slot:items="props">
                                 <td>{{ props.item.player_id }}</td>
                                 <td>{{ props.item.steam_username }}</td>
-                                <td>{{ props.item.bank }}</td>
-                                <td>{{ props.item.bank }}</td>
-                                <td>{{ props.item.bank }}</td>
+                                <td>{{ props.item.team_1_bet.total_bet }}</td>
+                                <td>{{ props.item.team_1_bet.total_odds }}</td>
+                                <td>{{ props.item.team_1_bet.total_pwin }}</td>
+                                <td>{{ props.item.team_2_bet.total_bet }}</td>
+                                <td>{{ props.item.team_2_bet.total_odds}}</td>
+                                <td>{{ props.item.team_2_bet.total_pwin }}</td>
                                 <td>{{ props.item.bank }}</td>
 
                             </template>
                             <template v-slot:footer>
-                                <td></td><td></td><td></td><td></td><td></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
                                 <td style="background-color: blanchedalmond;">{{summary}}</td>
                             </template>
                         </v-data-table>
@@ -40,9 +43,12 @@
                 headers: [
                     {text: 'ID', value: 'player_id'},
                     {text: 'Steam Username', value: 'steam_username'},
-                    {text: 'Bet', value: 'bank'},
-                    {text: 'Odds', value: 'bank'},
-                    {text: 'P.Win', value: 'bank'},
+                    {text: 'Team 1 Bet', value: 'bank'},
+                    {text: 'Team 1 Odds', value: 'bank'},
+                    {text: 'Team 1 P.Win', value: 'bank'},
+                    {text: 'Team 2 Bet', value: 'bank'},
+                    {text: 'Team 2 Odds', value: 'bank'},
+                    {text: 'Team 2 P.Win', value: 'bank'},
                     {text: 'Bank', value: 'bank'},
                 ],
 
