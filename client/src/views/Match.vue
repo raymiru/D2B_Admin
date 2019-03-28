@@ -222,10 +222,17 @@
                                     </v-flex>
                                     <v-flex>
                                         <v-layout>
-                                            <v-flex v-if="!place_bet_pressed" md12>
+                                            <v-flex v-if="!place_bet_pressed && bet_permission" md12>
+                                            <v-btn type="submit"
+                                                   style="height: 60px; font-size: 26px"
+                                                   class="v-btn--large bet-button" block dark>PLACE BET
+                                            </v-btn>
+                                        </v-flex>
+
+                                            <v-flex v-if="!bet_permission" md12>
                                                 <v-btn type="submit"
                                                        style="height: 60px; font-size: 26px"
-                                                       class="v-btn--large bet-button" block dark>PLACE BET
+                                                       class="v-btn--large disable-events" block dark>SET BET VALUE
                                                 </v-btn>
                                             </v-flex>
                                             <v-flex v-else-if="place_bet_pressed">
@@ -305,46 +312,46 @@
                     </v-layout>
                 </v-flex>
             </v-layout>
-            <v-flex>
-                <v-layout row wrap style="margin-top: 20px">
-                    <v-flex class="ma-2">
-                        <v-data-table
-                                :headers="headers"
-                                :items="desserts"
-                                class="elevation-1"
-                        >
-                            <template v-slot:items="props">
-                                <td>{{ props.item.name }}</td>
-                                <td class="text-xs-right">{{ props.item.calories }}</td>
-                                <td class="text-xs-right">{{ props.item.calories }}</td>
-                                <td class="text-xs-right">{{ props.item.calories }}</td>
-                                <td class="text-xs-right">{{ props.item.fat }}</td>
-                                <td class="text-xs-right">{{ props.item.fat }}</td>
-                                <td class="text-xs-right">{{ props.item.fat }}</td>
-                                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                                <td class="text-xs-right">{{ props.item.protein }}</td>
-                                <td class="text-xs-right">{{ props.item.iron }}</td>
-                            </template>
-                        </v-data-table>
-                    </v-flex>
-                    <v-flex class="ma-2">
-                        <v-data-table
-                                :headers="headers"
-                                :items="desserts"
-                                class="elevation-1"
-                        >
-                            <template v-slot:items="props">
-                                <td>{{ props.item.name }}</td>
-                                <td class="text-xs-right">{{ props.item.calories }}</td>
-                                <td class="text-xs-right">{{ props.item.fat }}</td>
-                                <td class="text-xs-right">{{ props.item.carbs }}</td>
-                                <td class="text-xs-right">{{ props.item.protein }}</td>
-                                <td class="text-xs-right">{{ props.item.iron }}</td>
-                            </template>
-                        </v-data-table>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
+            <!--<v-flex>-->
+                <!--<v-layout row wrap style="margin-top: 20px">-->
+                    <!--<v-flex class="ma-2">-->
+                        <!--<v-data-table-->
+                                <!--:headers="headers"-->
+                                <!--:items="desserts"-->
+                                <!--class="elevation-1"-->
+                        <!--&gt;-->
+                            <!--<template v-slot:items="props">-->
+                                <!--<td>{{ props.item.name }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
+                            <!--</template>-->
+                        <!--</v-data-table>-->
+                    <!--</v-flex>-->
+                    <!--<v-flex class="ma-2">-->
+                        <!--<v-data-table-->
+                                <!--:headers="headers"-->
+                                <!--:items="desserts"-->
+                                <!--class="elevation-1"-->
+                        <!--&gt;-->
+                            <!--<template v-slot:items="props">-->
+                                <!--<td>{{ props.item.name }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
+                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
+                            <!--</template>-->
+                        <!--</v-data-table>-->
+                    <!--</v-flex>-->
+                <!--</v-layout>-->
+            <!--</v-flex>-->
         </v-container>
     </v-content>
 </template>
@@ -963,9 +970,6 @@
                     })
                 })
             },
-            userList() {
-                console.log(this.user_list)
-            },
         },
         watch: {
             max_bet: function () {
@@ -989,6 +993,11 @@
                 if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0) {
                     this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
                 }
+            }
+        },
+        computed: {
+            bet_permission: function () {
+                return !!(this.winner && this.bet_value != 0);
             }
         }
     }
