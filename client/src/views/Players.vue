@@ -60,6 +60,17 @@
             usd: Number
         },
         methods: {},
+        watch: {
+          players: function (data) {
+              if (elem.currency === 'rub') {
+                  elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
+                  elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
+                  elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
+                  elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
+                  elem.bank = (elem.bank/this.usd).toFixed(2);
+              }
+          }
+        },
         created() {
 
         },
@@ -68,13 +79,7 @@
                 let summ = 0;
                 this.players.forEach(elem => {
                     summ += parseFloat(elem.bank)
-                    if (elem.currency === 'rub') {
-                        elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
-                        elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
-                        elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
-                        elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
-                        elem.bank = (elem.bank/this.usd).toFixed(2);
-                    }
+
                 });
                 return summ.toFixed(2)
             },
