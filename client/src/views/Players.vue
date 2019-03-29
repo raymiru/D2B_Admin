@@ -61,18 +61,7 @@
         },
         methods: {},
         created() {
-           setTimeout(() => {
-               this.players.forEach(elem => {
-                   if (elem.currency === 'rub') {
-                       elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
-                       elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
-                       elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
-                       elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
-                       elem.bank = (elem.bank/this.usd).toFixed(2);
 
-                   }
-               })
-           }, 10)
         },
         computed: {
             summary: function () {
