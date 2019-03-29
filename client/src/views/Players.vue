@@ -23,7 +23,7 @@
 
                             </template>
                             <template v-slot:footer>
-                                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                                <td></td><td></td><td></td><td></td><td>{{pwin_team1}}</td><td></td><td></td><td>{{pwin_team2}}</td>
                                 <td style="background-color: blanchedalmond;">{{summary}}</td>
                             </template>
                         </v-data-table>
@@ -56,9 +56,24 @@
 
         },
         props: {
-            players: Array
+            players: Array,
+            usd: Number
         },
         methods: {},
+        created() {
+           setTimeout(() => {
+               this.players.forEach(elem => {
+                   if (elem.currency === 'rub') {
+                       elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
+                       elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
+                       elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
+                       elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
+                       elem.bank = (elem.bank/this.usd).toFixed(2);
+
+                   }
+               })
+           }, 10)
+        },
         computed: {
             summary: function () {
                 let summ = 0;
@@ -66,8 +81,24 @@
                     summ += parseFloat(elem.bank)
                 });
                 return summ.toFixed(2)
+            },
+            pwin_team1: function () {
+                let pwin_team1 = 0;
+                this.players.forEach(elem => {
+                   pwin_team1 += parseFloat(elem.team_1_bet.total_pwin)
+                });
+                return pwin_team1.toFixed(2)
+            },
+            pwin_team2: function () {
+                let pwin_team2 = 0;
+                this.players.forEach(elem => {
+                    pwin_team2 += parseFloat(elem.team_2_bet.total_pwin)
+                });
+                return pwin_team2.toFixed(2)
             }
-        }
+        },
+
+
     }
 
             // players: function (data) {

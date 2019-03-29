@@ -24,6 +24,7 @@
             }
         },
 
+
         sockets: {
 
             // player_info_update: function (data) {
@@ -51,8 +52,13 @@
                 steam_username: 'admin',
                 permission: 'admin'
             });
+
+
         },
 
+        beforeCreate() {
+
+        }
 
     }
 
