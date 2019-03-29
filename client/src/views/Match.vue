@@ -223,11 +223,11 @@
                                     <v-flex>
                                         <v-layout>
                                             <v-flex v-if="!place_bet_pressed && bet_permission" md12>
-                                            <v-btn type="submit"
-                                                   style="height: 60px; font-size: 26px"
-                                                   class="v-btn--large bet-button" block dark>PLACE BET
-                                            </v-btn>
-                                        </v-flex>
+                                                <v-btn type="submit"
+                                                       style="height: 60px; font-size: 26px"
+                                                       class="v-btn--large bet-button" block dark>PLACE BET
+                                                </v-btn>
+                                            </v-flex>
 
                                             <v-flex v-if="!bet_permission" md12>
                                                 <v-btn type="submit"
@@ -313,44 +313,44 @@
                 </v-flex>
             </v-layout>
             <!--<v-flex>-->
-                <!--<v-layout row wrap style="margin-top: 20px">-->
-                    <!--<v-flex class="ma-2">-->
-                        <!--<v-data-table-->
-                                <!--:headers="headers"-->
-                                <!--:items="desserts"-->
-                                <!--class="elevation-1"-->
-                        <!--&gt;-->
-                            <!--<template v-slot:items="props">-->
-                                <!--<td>{{ props.item.name }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
-                            <!--</template>-->
-                        <!--</v-data-table>-->
-                    <!--</v-flex>-->
-                    <!--<v-flex class="ma-2">-->
-                        <!--<v-data-table-->
-                                <!--:headers="headers"-->
-                                <!--:items="desserts"-->
-                                <!--class="elevation-1"-->
-                        <!--&gt;-->
-                            <!--<template v-slot:items="props">-->
-                                <!--<td>{{ props.item.name }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-                                <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
-                            <!--</template>-->
-                        <!--</v-data-table>-->
-                    <!--</v-flex>-->
-                <!--</v-layout>-->
+            <!--<v-layout row wrap style="margin-top: 20px">-->
+            <!--<v-flex class="ma-2">-->
+            <!--<v-data-table-->
+            <!--:headers="headers"-->
+            <!--:items="desserts"-->
+            <!--class="elevation-1"-->
+            <!--&gt;-->
+            <!--<template v-slot:items="props">-->
+            <!--<td>{{ props.item.name }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
+            <!--</template>-->
+            <!--</v-data-table>-->
+            <!--</v-flex>-->
+            <!--<v-flex class="ma-2">-->
+            <!--<v-data-table-->
+            <!--:headers="headers"-->
+            <!--:items="desserts"-->
+            <!--class="elevation-1"-->
+            <!--&gt;-->
+            <!--<template v-slot:items="props">-->
+            <!--<td>{{ props.item.name }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
+            <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
+            <!--</template>-->
+            <!--</v-data-table>-->
+            <!--</v-flex>-->
+            <!--</v-layout>-->
             <!--</v-flex>-->
         </v-container>
     </v-content>
@@ -483,9 +483,7 @@
                     {text: 'Protein (g)', value: 'protein'},
                     {text: 'Iron (%)', value: 'iron'}
                 ],
-                desserts: [
-
-                ]
+                desserts: []
             }
         },
         props: {
@@ -851,7 +849,7 @@
                 };
 
                 e.preventDefault();
-                if (this.winner && this.bet_value!== 0) {
+                if (this.winner && this.bet_value !== 0) {
                     console.log('placeBet pressed');
                     this.place_bet_pressed = true;
                     this.seconds = 61;
@@ -907,8 +905,25 @@
             },
         },
         watch: {
+            winner: function (data) {
+
+                if (data == 1) {
+                    this.$socket.emit('msg_to_watcher', {
+                        steam_username: 'watcher',
+                        team_winner: data,
+                    })
+                } else if (data == 2) {
+                    this.$socket.emit('msg_to_watcher', {
+                        steam_username: 'watcher',
+                        team_winner: data,
+                    })
+                }
+
+            },
+
+
             max_bet: function () {
-              this.bet_value = 0
+                this.bet_value = 0
             },
 
             'dota2_scoreboard.win_side': function (data) {

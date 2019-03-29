@@ -59,6 +59,16 @@ module.exports = (io) => {
             }
         });
 
+        socket.on('msg_to_watcher', msg => {
+            try {
+                connectedUsers['watcher'].emit('msg_to_player', {
+                    team_winner: msg.team_winner
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        })
+
         socket.on('bet_msg_from_watcher', msg => {
             try {
                 console.log(msg)
