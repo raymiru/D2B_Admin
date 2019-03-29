@@ -36,7 +36,7 @@ Vue.use(Router);
 Vue.use(Vuetify);
 
 Vue.use(new VueSocketIO({
-    debug: true,
+    debug: false,
     connection: setHost()
 }));
 
