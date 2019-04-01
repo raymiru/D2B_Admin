@@ -27,19 +27,6 @@
 
         sockets: {
 
-            // player_info_update: function (data) {
-            //     let index = this.players.findIndex(e => e.steam_username === data.steam_username);
-            //     if (index === -1 && !data.disconnected) setTimeout(() => {
-            //         this.players.push(data)
-            //     }, 400);
-            //     else if (index !== -1 && !data.disconnected) setTimeout(() => {
-            //         this.players.splice(index, 1, data)
-            //     }, 400);
-            //     else if (index !== -1 && data.disconnected) setTimeout(() => {
-            //         this.players.splice(index, 1)
-            //     }, 400)
-            // },
-
             admin_reload_player_info_update: function (data) {
                 this.players = data
             },
@@ -55,7 +42,6 @@
 
 
         },
-
         beforeCreate() {
 
         }

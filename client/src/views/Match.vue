@@ -37,7 +37,7 @@
                     </v-layout>
                     <v-layout>
                         <v-flex md12 ma-3 class="text-md-center">
-                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large">
+                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large" v-bind:class="{'url-transition': url_transition}">
                                 <v-icon dark>refresh</v-icon>
                             </v-btn>
                             <span class="mx-3">|</span>
@@ -301,7 +301,7 @@
 
                             </v-form>
                             <v-form
-                                    @submit="openZPlaySocketReverse">
+                                    @submit="openZPlaySocketReserve">
                                 <v-label>Reserve
                                     <v-btn type="submit">Start</v-btn>
                                 </v-label>
@@ -312,46 +312,7 @@
                     </v-layout>
                 </v-flex>
             </v-layout>
-            <!--<v-flex>-->
-            <!--<v-layout row wrap style="margin-top: 20px">-->
-            <!--<v-flex class="ma-2">-->
-            <!--<v-data-table-->
-            <!--:headers="headers"-->
-            <!--:items="desserts"-->
-            <!--class="elevation-1"-->
-            <!--&gt;-->
-            <!--<template v-slot:items="props">-->
-            <!--<td>{{ props.item.name }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
             <!--</template>-->
-            <!--</v-data-table>-->
-            <!--</v-flex>-->
-            <!--<v-flex class="ma-2">-->
-            <!--<v-data-table-->
-            <!--:headers="headers"-->
-            <!--:items="desserts"-->
-            <!--class="elevation-1"-->
-            <!--&gt;-->
-            <!--<template v-slot:items="props">-->
-            <!--<td>{{ props.item.name }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.calories }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.fat }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.carbs }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.protein }}</td>-->
-            <!--<td class="text-xs-right">{{ props.item.iron }}</td>-->
-            <!--</template>-->
-            <!--</v-data-table>-->
-            <!--</v-flex>-->
-            <!--</v-layout>-->
-            <!--</v-flex>-->
         </v-container>
     </v-content>
 </template>
@@ -451,14 +412,13 @@
                     },
                 },
                 match_url: '',
+                url_transition: false,
                 team_1_name: undefined,
                 team_2_name: undefined,
                 team_1_img: undefined,
                 team_2_img: undefined,
                 team_1_odds: 0,
                 team_2_odds: 0,
-                t_name: 'Championship name',
-                map_num_info: 'map_num_info',
                 bo: 'bo_info',
                 max_bet: 0,
                 winner: 0,
@@ -468,22 +428,7 @@
                 seconds: 0,
                 intervals: [],
                 bet_button: false,
-                user_list: [],
 
-                headers: [
-                    {
-                        text: 'Radiant',
-                        align: 'left',
-                        sortable: false,
-                        value: 'name'
-                    },
-                    {text: 'Calories', value: 'calories'},
-                    {text: 'Fat (g)', value: 'fat'},
-                    {text: 'Carbs (g)', value: 'carbs'},
-                    {text: 'Protein (g)', value: 'protein'},
-                    {text: 'Iron (%)', value: 'iron'}
-                ],
-                desserts: []
             }
         },
         props: {
@@ -493,14 +438,6 @@
 
 
         mounted() {
-            for (let i = 0; i < 20; i++) {
-                this.user_list[i] = localStorage[i];
-            }
-            console.log(this.user_list)
-            this.user_list.forEach(elem => {
-                console.log(elem)
-            })
-
             if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0) {
                 this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
             }
@@ -746,6 +683,7 @@
             zplaySocketReserve.on('dota2_scoreboard', zplayData)
 
         },
+
         sockets: {
 
 
@@ -778,14 +716,13 @@
             }
         },
 
-
         methods: {
             openZPlaySocket(e) {
                 e.preventDefault();
                 zplaySocket.open();
                 zplaySocket.emit('dota2_match', this.match_id);
             },
-            openZPlaySocketReverse(e) {
+            openZPlaySocketReserve(e) {
                 e.preventDefault();
                 e.preventDefault();
                 zplaySocketReserve.open();
@@ -894,17 +831,23 @@
             },
             urlHandler() {
                 console.log('URL HANDLER: ');
+                this.url_transition = false;
                 this.players.forEach(element => {
                     console.log(element.steam_username);
                     this.$socket.emit('url_handler', {
                         steam_username: element.steam_username,
                         match_url: this.match_url
-
                     })
                 })
             },
         },
+
         watch: {
+
+            match_url: function () {
+                this.url_transition = true
+            },
+
             winner: function (data) {
 
                 if (data == 1) {
@@ -923,7 +866,9 @@
 
 
             max_bet: function () {
-                this.bet_value = 0
+                if (this.bet_value > this.max_bet) {
+                    this.bet_value = this.max_bet
+                }
             },
 
             'dota2_scoreboard.win_side': function (data) {
@@ -945,6 +890,7 @@
                 }
             }
         },
+
         computed: {
             bet_permission: function () {
                 return !!(this.winner && this.bet_value != 0);
@@ -1104,4 +1050,7 @@
     }
 
 
+    .url-transition {
+        background-color: green!important;
+    }
 </style>
