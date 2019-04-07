@@ -757,13 +757,13 @@
                         return betTotal
                     } else if (bet_value < this.max_bet && bet_value > 0.3) {
                         console.log('>0.3')
-                        arr = [-0.2, -0.1, 0, 0.1]
+                        arr = [-0.2, -0.1, 0, 0.1, 0.2]
                         rand = Math.floor(Math.random() * arr.length);
                         betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
                         return betTotal
-                    } else if (bet_value < this.max_bet && bet_value > 0.7) {
+                    } else if (bet_value < this.max_bet && bet_value > 0.6) {
                         console.log('>0.7')
-                        arr = [-0.2, -0.1, 0, 0.1, 0.2]
+                        arr = [-0.3,-0.2, -0.1, 0, 0.1, 0.2,0.3]
                         rand = Math.floor(Math.random() * arr.length);
                         betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
                         return betTotal
