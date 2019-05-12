@@ -606,8 +606,8 @@
                 if (data.match_url) this.match_url = data.match_url;
                 if (data.team_1_name) this.team_1_name = data.team_1_name;
                 if (data.team_2_name) this.team_2_name = data.team_2_name;
-                if (data.team_1_odds) this.team_1_odds = data.team_1_odds;
-                if (data.team_2_odds) this.team_2_odds = data.team_2_odds;
+                if (data.team_1_odds) this.team_1_odds = data.team_1_odds.slice(1);
+                if (data.team_2_odds) this.team_2_odds = data.team_2_odds.slice(1);
                 if (data.t_name) this.t_name = data.t_name;
                 if (data.bo) this.bo = data.bo;
                 if (data.map_num_info) this.map_num_info = data.map_num_info;
