@@ -29,6 +29,8 @@
 
             admin_reload_player_info_update: function (data) {
                 this.players = data
+                console.log('data: ')
+                console.log(data)
             },
 
 
@@ -41,8 +43,13 @@
             });
 
 
+
         },
         beforeCreate() {
+
+        },
+
+        mounted() {
 
         }
 

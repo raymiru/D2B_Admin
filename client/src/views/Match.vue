@@ -1,15 +1,5 @@
 <template lang="html">
     <v-content>
-        <div>
-            <v-alert
-                    :value="dota2_scoreboard.win_side"
-                    dismissible
-                    type="info"
-            >
-                {{dota2_scoreboard.win_side}} win this game! GG WP!!!
-            </v-alert>
-
-        </div>
         <v-container fluid style="background: linear-gradient(left, #F2C14E, #F78154);" class="text-md-center">
             <v-layout row wrap>
                 <v-flex md4 sm4>
@@ -37,7 +27,8 @@
                     </v-layout>
                     <v-layout>
                         <v-flex md12 ma-3 class="text-md-center">
-                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large" v-bind:class="{'url-transition': url_transition}">
+                            <v-btn dark type="button" v-on:click="urlHandler" fab class="v-btn--large"
+                                   v-bind:class="{'url-transition': url_transition}">
                                 <v-icon dark>refresh</v-icon>
                             </v-btn>
                             <span class="mx-3">|</span>
@@ -46,7 +37,6 @@
 
                         </v-flex>
                     </v-layout>
-
                 </v-flex>
 
                 <v-flex md4 sm4>
@@ -173,28 +163,24 @@
                                     label="ACC"
                             ></v-text-field>
                         </v-flex>
-                         <v-flex wrap row md10 sm10 style="font-size: 24px">
-                             <v-flex v-if="winner === 1">
-                                 <v-flex  >
-                                     P.Win Solo: {{((bet_value * team_1_odds) - bet_value).toFixed(2)}}
-                                 </v-flex>
-                                 <v-flex >
-                                     P.Win All : {{(((bet_value * team_1_odds) - bet_value) * acc_number).toFixed(2)}}
-                                 </v-flex>
-                             </v-flex>
-                             <v-flex  v-else="winner === 2">
-                                 <v-flex  >
-                                     P.Win Solo: {{((bet_value * team_2_odds) - bet_value).toFixed(2)}}
-                                 </v-flex>
-                                 <v-flex >
-                                     P.Win All : {{(((bet_value * team_2_odds) - bet_value) * acc_number).toFixed(2)}}
-                                 </v-flex>
-                             </v-flex>
-                         </v-flex>
-
-
-
-
+                        <v-flex wrap row md10 sm10 style="font-size: 24px">
+                            <v-flex v-if="winner === 1">
+                                <v-flex>
+                                    P.Win Solo: {{((bet_value * team_1_odds) - bet_value).toFixed(2)}}
+                                </v-flex>
+                                <v-flex>
+                                    P.Win All : {{(((bet_value * team_1_odds) - bet_value) * acc_number).toFixed(2)}}
+                                </v-flex>
+                            </v-flex>
+                            <v-flex v-else="winner === 2">
+                                <v-flex>
+                                    P.Win Solo: {{((bet_value * team_2_odds) - bet_value).toFixed(2)}}
+                                </v-flex>
+                                <v-flex>
+                                    P.Win All : {{(((bet_value * team_2_odds) - bet_value) * acc_number).toFixed(2)}}
+                                </v-flex>
+                            </v-flex>
+                        </v-flex>
 
 
                     </v-layout>
@@ -353,249 +339,7 @@
 
 
         mounted() {
-            if (this.dota2_scoreboard.radiant.radiant_gold_lead < 0) {
-                this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
-            }
-            if (this.dota2_scoreboard.dire.dire_gold_lead < 0) {
-                this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
-            }
 
-            const zplayData = data => {
-                console.log(data)
-                if (data.win_side) this.dota2_scoreboard.win_side = data.win_side;
-                this.dota2_scoreboard.finished = data.finished;
-                this.dota2_scoreboard.radiant.score = data.radiant.score
-                if (data.radiant_gold_lead) this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
-                this.dota2_scoreboard.dire.score = data.dire.score;
-                this.dota2_scoreboard.radiant.team_name = data.radiant_team.name;
-                this.dota2_scoreboard.dire.team_name = data.dire_team.name;
-                if (data.radiant_gold_lead > 0) {
-                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
-                    this.dota2_scoreboard.dire.dire_gold_lead = data.radiant_gold_lead * (-1);
-                } else {
-                    this.dota2_scoreboard.dire.dire_gold_lead = data.radiant_gold_lead * (-1);
-                    this.dota2_scoreboard.radiant.radiant_gold_lead = data.radiant_gold_lead;
-                }
-
-                if (data.game_time) {
-                    let date = new Date(null);
-                    date.setSeconds(data.game_time);
-                    this.dota2_scoreboard.game_time = date.toISOString().substr(11, 8);
-                }
-
-
-                if (data.radiant.towers[0] === 1) {
-                    this.dota2_scoreboard.radiant.towers.bottom.t4 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.bottom.t4 = '_'
-                }
-
-                if (data.radiant.towers[1] === 1) {
-                    this.dota2_scoreboard.radiant.towers.top.t4 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.top.t4 = '_'
-                }
-
-                if (data.radiant.towers[2] === 1) {
-                    this.dota2_scoreboard.radiant.towers.bottom.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.bottom.t3 = '_'
-                }
-
-                if (data.radiant.towers[3] === 1) {
-                    this.dota2_scoreboard.radiant.towers.bottom.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.bottom.t2 = '_'
-                }
-
-                if (data.radiant.towers[4] === 1) {
-                    this.dota2_scoreboard.radiant.towers.bottom.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.bottom.t1 = '_'
-                }
-
-                if (data.radiant.towers[5] === 1) {
-                    this.dota2_scoreboard.radiant.towers.middle.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.middle.t3 = '_'
-                }
-
-                if (data.radiant.towers[6] === 1) {
-                    this.dota2_scoreboard.radiant.towers.middle.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.middle.t2 = '_'
-                }
-
-                if (data.radiant.towers[7] === 1) {
-                    this.dota2_scoreboard.radiant.towers.middle.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.middle.t1 = '_'
-                }
-
-                if (data.radiant.towers[8] === 1) {
-                    this.dota2_scoreboard.radiant.towers.top.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.top.t3 = '_'
-                }
-
-                if (data.radiant.towers[9] === 1) {
-                    this.dota2_scoreboard.radiant.towers.top.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.top.t2 = '_'
-                }
-
-                if (data.radiant.towers[10] === 1) {
-                    this.dota2_scoreboard.radiant.towers.top.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.radiant.towers.top.t1 = '_'
-                }
-
-                if (data.radiant.barracks[0] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.bottom.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.bottom.mili = '_'
-                }
-
-                if (data.radiant.barracks[1] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.bottom.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.bottom.range = '_'
-                }
-
-                if (data.radiant.barracks[2] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.middle.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.middle.mili = '_'
-                }
-
-                if (data.radiant.barracks[3] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.middle.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.middle.range = '_'
-                }
-
-                if (data.radiant.barracks[4] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.top.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.top.mili = '_'
-                }
-
-                if (data.radiant.barracks[5] === 1) {
-                    this.dota2_scoreboard.radiant.barracks.top.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.radiant.barracks.top.range = '_'
-                }
-
-                //
-                //
-                //
-
-
-                if (data.dire.towers[0] === 1) {
-                    this.dota2_scoreboard.dire.towers.bottom.t4 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.bottom.t4 = '_'
-                }
-
-                if (data.dire.towers[1] === 1) {
-                    this.dota2_scoreboard.dire.towers.top.t4 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.top.t4 = '_'
-                }
-
-                if (data.dire.towers[2] === 1) {
-                    this.dota2_scoreboard.dire.towers.bottom.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.bottom.t3 = '_'
-                }
-
-                if (data.dire.towers[3] === 1) {
-                    this.dota2_scoreboard.dire.towers.bottom.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.bottom.t2 = '_'
-                }
-
-                if (data.dire.towers[4] === 1) {
-                    this.dota2_scoreboard.dire.towers.bottom.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.bottom.t1 = '_'
-                }
-
-                if (data.dire.towers[5] === 1) {
-                    this.dota2_scoreboard.dire.towers.middle.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.middle.t3 = '_'
-                }
-
-                if (data.dire.towers[6] === 1) {
-                    this.dota2_scoreboard.dire.towers.middle.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.middle.t2 = '_'
-                }
-
-                if (data.dire.towers[7] === 1) {
-                    this.dota2_scoreboard.dire.towers.middle.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.middle.t1 = '_'
-                }
-
-                if (data.dire.towers[8] === 1) {
-                    this.dota2_scoreboard.dire.towers.top.t3 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.top.t3 = '_'
-                }
-
-                if (data.dire.towers[9] === 1) {
-                    this.dota2_scoreboard.dire.towers.top.t2 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.top.t2 = '_'
-                }
-
-                if (data.dire.towers[10] === 1) {
-                    this.dota2_scoreboard.dire.towers.top.t1 = '||'
-                } else {
-                    this.dota2_scoreboard.dire.towers.top.t1 = '_'
-                }
-
-                if (data.dire.barracks[0] === 1) {
-                    this.dota2_scoreboard.dire.barracks.bottom.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.bottom.mili = '_'
-                }
-
-                if (data.dire.barracks[1] === 1) {
-                    this.dota2_scoreboard.dire.barracks.bottom.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.bottom.range = '_'
-                }
-
-                if (data.dire.barracks[2] === 1) {
-                    this.dota2_scoreboard.dire.barracks.middle.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.middle.mili = '_'
-                }
-
-                if (data.dire.barracks[3] === 1) {
-                    this.dota2_scoreboard.dire.barracks.middle.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.middle.range = '_'
-                }
-
-                if (data.dire.barracks[4] === 1) {
-                    this.dota2_scoreboard.dire.barracks.top.mili = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.top.mili = '_'
-                }
-
-                if (data.dire.barracks[5] === 1) {
-                    this.dota2_scoreboard.dire.barracks.top.range = '/\\'
-                } else {
-                    this.dota2_scoreboard.dire.barracks.top.range = '_'
-                }
-            }
-
-            zplaySocket.on('dota2_scoreboard', zplayData)
-            zplaySocketReserve.on('dota2_scoreboard', zplayData)
 
         },
 
@@ -632,29 +376,6 @@
         },
 
         methods: {
-            openZPlaySocket(e) {
-                e.preventDefault();
-                zplaySocket.open();
-                zplaySocket.emit('dota2_match', this.match_id);
-            },
-            openZPlaySocketReserve(e) {
-                e.preventDefault();
-                e.preventDefault();
-                zplaySocketReserve.open();
-                zplaySocketReserve.emit('dota2_match', this.match_id);
-            },
-
-            closeZPlaySocket(e) {
-                e.preventDefault();
-                zplaySocket.close();
-                console.log('CLOSED')
-            },
-            closeZPlaySocketReserve(e) {
-                e.preventDefault();
-                zplaySocketReserve.close();
-                console.log('CLOSED')
-            },
-
             chooseWinner(t_winner) {
                 this.winner = t_winner;
             },
@@ -678,7 +399,7 @@
                         return betTotal
                     } else if (bet_value < this.max_bet && bet_value > 0.6) {
                         console.log('>0.7')
-                        arr = [-0.3,-0.2, -0.1, 0, 0.1, 0.2,0.3]
+                        arr = [-0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3]
                         rand = Math.floor(Math.random() * arr.length);
                         betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
                         return betTotal
@@ -966,6 +687,6 @@
 
 
     .url-transition {
-        background-color: green!important;
+        background-color: green !important;
     }
 </style>
