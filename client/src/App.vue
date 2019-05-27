@@ -29,8 +29,10 @@
 
             admin_reload_player_info_update: function (data) {
                 this.players = data
-                console.log('data: ')
-                console.log(data)
+                this.players.forEach(elem => {
+                    if (elem.player_id)
+                    console.log(elem)
+                })
             },
 
 

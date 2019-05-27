@@ -23,7 +23,14 @@
 
                             </template>
                             <template v-slot:footer>
-                                <td></td><td></td><td></td><td></td><td>{{pwin_team1}}</td><td></td><td></td><td>{{pwin_team2}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{pwin_team1}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{pwin_team2}}</td>
                                 <td style="background-color: blanchedalmond;">{{summary}}</td>
                             </template>
                         </v-data-table>
@@ -36,6 +43,9 @@
 </template>
 
 <script>
+    import {randomFromPlayersArray} from "../services/ProfitService/randomFromArray";
+
+
     export default {
         name: "Players",
         data() {
@@ -61,30 +71,80 @@
         },
         methods: {},
         watch: {
-          players: function (data) {
-              this.players.forEach(elem => {
-                  if (elem.currency === 'rub') {
-                      elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
-                      elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
-                      elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
-                      elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
-                      elem.bank = (elem.bank/this.usd).toFixed(2);
-                  }
-              })
-          }
+            players: function (data) {
+                this.players.forEach(elem => {
+                    if (elem.currency === 'rub') {
+                        elem.team_1_bet.total_bet = (elem.team_1_bet.total_bet / this.usd).toFixed(2);
+                        elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin / this.usd).toFixed(2);
+                        elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet / this.usd).toFixed(2);
+                        elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin / this.usd).toFixed(2);
+                        elem.bank = (elem.bank / this.usd).toFixed(2);
+                    }
+                })
+            }
         },
         created() {
-            setTimeout( () => {
-               this.players.forEach(elem => {
-                   if (elem.currency === 'rub') {
-                       elem.team_1_bet.total_bet =  (elem.team_1_bet.total_bet/this.usd).toFixed(2);
-                       elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin/this.usd).toFixed(2);
-                       elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet/this.usd).toFixed(2);
-                       elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin/this.usd).toFixed(2);
-                       elem.bank = (elem.bank/this.usd).toFixed(2);
-                   }
-               })
-            }, 10)
+            let freePlayersIDs = [];
+            let matchPlayersIDs = [];
+            let matchObj = {
+                player_list: {},
+                team1_bet: {},
+                team2_bet: {}
+            }, i
+
+
+            setTimeout(() => {
+
+
+                this.players.forEach(elem => {
+                    if (elem.currency === 'rub') {
+                        elem.team_1_bet.total_bet = (elem.team_1_bet.total_bet / this.usd).toFixed(2);
+                        elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin / this.usd).toFixed(2);
+                        elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet / this.usd).toFixed(2);
+                        elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin / this.usd).toFixed(2);
+                        elem.bank = (elem.bank / this.usd).toFixed(2);
+                    }
+                })
+                this.players.forEach(elem => {
+                    freePlayersIDs.push(elem.player_id)
+                })
+
+
+
+
+                localStorage['freePlayersIDs'] = JSON.stringify(freePlayersIDs);
+
+                 matchPlayersIDs = randomFromPlayersArray(JSON.parse(localStorage['freePlayersIDs']),2)
+
+                for (i = 0; i < matchPlayersIDs.length; i++) {
+                    matchObj.player_list[i] = {
+                        id: matchPlayersIDs[i],
+                        team1_bet: {
+                            bet_summ: 20,
+                            koef_summ: 1.82,
+                            dohod: 36.4,
+                            pribil: 16.4
+                        },
+                        team2_bet: {}
+                    }
+                }
+                matchObj.bet_summ = 0;
+                for (let prop in matchObj.player_list) {
+
+                    matchObj.bet_summ += matchObj.player_list[prop].team1_bet.bet_summ
+                }
+
+                console.log(matchObj.bet_summ)
+
+                console.log('matchobj')
+                console.log(matchObj)
+
+                localStorage['match-1'] = JSON.stringify(matchObj)
+
+
+            }, 500)
+
+
         },
         computed: {
             summary: function () {
@@ -98,7 +158,7 @@
             pwin_team1: function () {
                 let pwin_team1 = 0;
                 this.players.forEach(elem => {
-                   pwin_team1 += parseFloat(elem.team_1_bet.total_pwin)
+                    pwin_team1 += parseFloat(elem.team_1_bet.total_pwin)
                 });
                 return pwin_team1.toFixed(2)
             },
@@ -113,13 +173,6 @@
 
 
     }
-
-            // players: function (data) {
-            //     data.forEach(elem => {
-            //         this.summary += parseFloat(elem.bank)
-            //     })
-            // }
-
 
 </script>
 
