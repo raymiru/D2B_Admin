@@ -19,9 +19,9 @@ const isInteger = (num) => {
 };
 
 
-let power = 0.5;
-let max_bet = 10;
-let active_accounts = 10;
+let power = 0.4;
+let max_bet = 30;
+let active_accounts = 20;
 let min_acc_to_bet = 0;
 let max_total_bet_summ = 0;
 
@@ -34,26 +34,34 @@ console.log(min_acc_to_bet)
 const genArray = [];
 
 
-const max = (100/min_acc_to_bet)/100;
+const max = (100 / min_acc_to_bet) / 100;
 
 
-
-for (let i = 0; i < 45; i++) {
-    if (chance.bool({likelihood: 90 * power})) {
+for (let i = 0; i < 100; i++) {
+    if (chance.bool({likelihood: 84 * power})) {
         genArray.push(chance.floating({min: max, max: max, fixed: 3}));
     }
 
-    if (chance.bool({likelihood: 60 * (1-power)})) {
-        genArray.push(chance.floating({min: max/3.75, max: max/2.03}));
+    if (chance.bool({likelihood: 39 * (1 - power)})) {
+        genArray.push(chance.floating({min: max / 2, max: max / 2, fixed: 3}));
     }
-    if (chance.bool({likelihood: 70 * (1-power)})) {
-        genArray.push(chance.floating({min: max/2.02, max: max/1.13}));
+    if (chance.bool({likelihood: 78 * (1 - power)})) {
+        genArray.push(chance.floating({min: max / 3.2, max: max / 1.07, fixed: 3}));
     }
 }
 
+const delayArray = [];
 
-// const genArray = [0.2, 0.1, 0.13, 0.16, 0.18, 0.185, 0.135, 0.14, 0.17, 0.1, 0.2, 0.095, 0.145, 0.115, 0.15, 0.11, 0.05, 0.07, 0.09, 0.2, 0.175, 0.142, 0.135, 0.2, 0.2, 0.1, 0.135, 0.14, 0.17, 0.1, 0.2, 0.095, 0.2, 0.14, 0.17, 0.1, 0.2, 0.095, 0.145, 0.115, 0.15, 0.11, 0.05, 0.07, 0.09, 0.2,];
+for (let i = 0; i < 50; i++) {
+    delayArray.push(chance.integer({min: 40/power, max: 600/power}))
+}
+
+console.log(delayArray)
+
 const newGenArray = [];
+
+const newDelayArray = [];
+
 let arraySumm = 0;
 genArray.forEach((elem, index, array) => {
     if (arraySumm < 0.945) {
@@ -71,30 +79,26 @@ console.log(newGenArray);
 console.log(arraySumm);
 
 
-
-
-
-
 console.log(min_acc_to_bet);
 
 
-    let arr = [];
-    newGenArray.forEach(elem => {
-        if (isInteger(elem * max_total_bet_summ)) {
-            arr.push(elem * max_total_bet_summ)
-        } else {
-            arr.push(Math.round(elem * max_total_bet_summ))
-        }
-    });
+let arr = [];
+newGenArray.forEach(elem => {
+    if (isInteger(elem * max_total_bet_summ)) {
+        arr.push(elem * max_total_bet_summ)
+    } else {
+        arr.push(Math.round(elem * max_total_bet_summ))
+    }
+});
 
-    console.log(arr)
-    let arrSumm = 0;
-    let arrCount = 0;
-    arr.forEach(elem => {
-        arrSumm += elem
-        arrCount += 1;
-    })
-    console.log(arrSumm)
-    console.log(arrCount)
+console.log(arr)
+let arrSumm = 0;
+let arrCount = 0;
+arr.forEach(elem => {
+    arrSumm += elem
+    arrCount += 1;
+})
+console.log(arrSumm)
+console.log(arrCount)
 
 

@@ -29,8 +29,9 @@
 
             admin_reload_player_info_update: function (data) {
                 this.players = data
+                console.log('DATA')
                 this.players.forEach(elem => {
-                    if (elem.player_id)
+                    if (elem)
                     console.log(elem)
                 })
             },
@@ -38,6 +39,18 @@
 
         },
         created() {
+            setTimeout(() => {
+                localStorage['all-players'] = JSON.stringify(this.players);
+                let allPlayersIds = [];
+                this.players.forEach(elem => {
+                    allPlayersIds.push(elem.player_id);
+                });
+                localStorage['all-players-ids'] = JSON.stringify(allPlayersIds);
+
+
+            }, 700)
+
+
             this.$socket.emit('login', {
                 user_id: 0,
                 steam_username: 'admin',

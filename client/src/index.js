@@ -13,8 +13,18 @@ import {setHost} from "./config";
 const router =  new Router({
     routes: [
         {
-            path: '/match',
+            path: '/match/1',
             component: () => import("./views/Match"),
+            props: true
+        },
+        {
+            path: '/match/2',
+            component: () => import("./views/Match2"),
+            props: true
+        },
+        {
+            path: '/match/3',
+            component: () => import("./views/Match3"),
             props: true
         },
         {
@@ -24,7 +34,9 @@ const router =  new Router({
         },
 
         {
-            path: '/', redirect: '/match'
+            path: '/',
+            // redirect: '/match'
+            component: () => import('./views/Index')
         }
     ]
 });

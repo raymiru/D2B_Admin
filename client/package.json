@@ -15,6 +15,7 @@
     "@types/chance": "^1.0.4",
     "axios": "^0.18.0",
     "chance": "^1.0.18",
+    "dota2-api": "^0.2.1",
     "mstsc.js": "^0.2.4",
     "node-rdp": "^1.0.1",
     "node-rdpjs": "^0.3.0",

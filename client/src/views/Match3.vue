@@ -34,7 +34,6 @@
                             <span class="mx-3">|</span>
 
                             <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
-                            <v-btn v-on:click="" type="button">TEST</v-btn>
 
                         </v-flex>
                     </v-layout>
@@ -220,7 +219,6 @@
 <script>
     import {zplaySocket} from "../common/websockets";
     import {zplaySocketReserve} from '../common/websockets'
-    import {bus} from "../services/bus";
 
 
     export default {
@@ -229,7 +227,7 @@
             return {
                 reverseTeams: false,
                 match_id: '',
-
+                
                 match_url: '',
                 url_transition: false,
                 team_1_name: undefined,
@@ -257,13 +255,9 @@
             usd: Number
         },
 
-        deactivated: function() {
-            bus.$emit('match1', {
-                team_1_name: 'Navi',
-                team_2_name: "VP"
-            })
-        },
-        created() {
+
+        mounted() {
+
 
         },
 
