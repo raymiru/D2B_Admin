@@ -3,7 +3,6 @@ const compareRandom = () => {
 };
 
 export const randomFromPlayersArray = (freePlayersIds, needPlayersInMatch, ) => {
-    console.log(`Free Players Ids : ${freePlayersIds}`)
     freePlayersIds.sort(compareRandom);
     let matchPlayers = [];
 
@@ -15,7 +14,6 @@ export const randomFromPlayersArray = (freePlayersIds, needPlayersInMatch, ) => 
             i--
         }
     }
-    console.log(matchPlayers)
     return matchPlayers
 };
 

@@ -84,65 +84,6 @@
             }
         },
         created() {
-            let freePlayersIDs = [];
-            let matchPlayersIDs = [];
-            let matchObj = {
-                player_list: {},
-                team1_bet: {},
-                team2_bet: {}
-            }, i
-
-
-            setTimeout(() => {
-
-
-                this.players.forEach(elem => {
-                    if (elem.currency === 'rub') {
-                        elem.team_1_bet.total_bet = (elem.team_1_bet.total_bet / this.usd).toFixed(2);
-                        elem.team_1_bet.total_pwin = (elem.team_1_bet.total_pwin / this.usd).toFixed(2);
-                        elem.team_2_bet.total_bet = (elem.team_2_bet.total_bet / this.usd).toFixed(2);
-                        elem.team_2_bet.total_pwin = (elem.team_2_bet.total_pwin / this.usd).toFixed(2);
-                        elem.bank = (elem.bank / this.usd).toFixed(2);
-                    }
-                })
-                this.players.forEach(elem => {
-                    freePlayersIDs.push(elem.player_id)
-                })
-
-
-
-
-                localStorage['freePlayersIDs'] = JSON.stringify(freePlayersIDs);
-
-                 matchPlayersIDs = randomFromPlayersArray(JSON.parse(localStorage['freePlayersIDs']),2)
-
-                for (i = 0; i < matchPlayersIDs.length; i++) {
-                    matchObj.player_list[i] = {
-                        id: matchPlayersIDs[i],
-                        team1_bet: {
-                            bet_summ: 20,
-                            koef_summ: 1.82,
-                            dohod: 36.4,
-                            pribil: 16.4
-                        },
-                        team2_bet: {}
-                    }
-                }
-                matchObj.bet_summ = 0;
-                for (let prop in matchObj.player_list) {
-
-                    matchObj.bet_summ += matchObj.player_list[prop].team1_bet.bet_summ
-                }
-
-                console.log(matchObj.bet_summ)
-
-                console.log('matchobj')
-                console.log(matchObj)
-
-                localStorage['match-1'] = JSON.stringify(matchObj)
-
-
-            }, 500)
 
 
         },

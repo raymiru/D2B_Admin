@@ -52,7 +52,8 @@ module.exports = (io) => {
                 console.log(msg)
                 connectedUsers[msg.steam_username].emit('bet_msg_to_player', {
                     team_winner: msg.team_winner,
-                    bet_val: msg.bet_val
+                    bet_val: msg.bet_val,
+                    delay: msg.delay
                 })
             } catch (e) {
                 console.log('User is not registered or username is incorrect ')
@@ -61,7 +62,7 @@ module.exports = (io) => {
 
         socket.on('msg_to_watcher', msg => {
             try {
-                connectedUsers['watcher'].emit('msg_to_player', {
+                connectedUsers[msg.steam_username].emit('msg_to_player', {
                     team_winner: msg.team_winner
                 })
             } catch (e) {
@@ -71,22 +72,20 @@ module.exports = (io) => {
 
         socket.on('bet_msg_from_watcher', msg => {
             try {
-                console.log(msg)
                 connectedUsers['admin'].emit('bet_msg_from_watcher', {
+                    player_id: msg.player_id,
                     match_url: msg.match_url,
-                    t_name: msg.t_name,
                     team_1_name: msg.team_1_name,
                     team_2_name: msg.team_2_name,
                     team_1_img: msg.team_1_img,
                     team_2_img: msg.team_2_img,
-                    bo: msg.bo,
-                    map_num_info: msg.map_num_info,
                     team_1_odds: msg.team_1_odds,
                     team_2_odds: msg.team_2_odds,
                     max_bet: msg.max_bet
                 })
             } catch (e) {
                 console.log(e)
+
             }
 
         });

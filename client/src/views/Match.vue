@@ -34,7 +34,7 @@
                             <span class="mx-3">|</span>
 
                             <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
-                            <v-btn v-on:click="" type="button">TEST</v-btn>
+                            <v-btn v-on:click="calcDelay" type="button">TEST</v-btn>
 
                         </v-flex>
                     </v-layout>
@@ -63,52 +63,74 @@
                                 >
                                     <v-flex class="ma-2" md12 d-inline-flex>
 
+                                        <v-flex>
+                                            <v-btn type="button"
+                                                   v-on:click="changeBetPower(0.1)"
+                                                   class="v-btn--small" fab>
+                                                10%
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button"
+                                                   v-on:click="changeBetPower(0.2)"
+                                                   class="v-btn--small" fab>
+                                                20%
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button"
+                                                   v-on:click="changeBetPower(0.3)"
+                                                   class="v-btn--small" fab>
+                                                30%
+                                            </v-btn>
+                                        </v-flex>
 
                                         <v-flex>
-                                            <v-text-field
-                                                    style="font-size: 28px"
-                                                    v-model="bet_value"
-                                                    label="BET VALUE"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex>
                                             <v-btn type="button"
-                                                   v-on:click="bet_value = (max_bet*0.2).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   v-on:click="changeBetPower(0.4)"
                                                    class="v-btn--small" fab>
-                                                {{(max_bet*0.2).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
+                                                40%
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
                                             <v-btn type="button"
-                                                   v-on:click="bet_value = (max_bet*0.3).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   v-on:click="changeBetPower(0.5)"
                                                    class="v-btn--small" fab>
-                                                {{(max_bet*0.3).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
+                                                50%
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
                                             <v-btn type="button"
-                                                   v-on:click="bet_value = (max_bet*0.4).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   v-on:click="changeBetPower(0.6)"
                                                    class="v-btn--small" fab>
-                                                {{(max_bet*0.4).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
+                                                60%
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
                                             <v-btn type="button"
-                                                   v-on:click="bet_value = (max_bet*0.6).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   v-on:click="changeBetPower(0.7)"
                                                    class="v-btn--small" fab>
-                                                {{(max_bet*0.6).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
+                                                70%
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
                                             <v-btn type="button"
-                                                   v-on:click="bet_value = (max_bet*0.8).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')"
+                                                   v-on:click="changeBetPower(0.8)"
                                                    class="v-btn--small" fab>
-                                                {{(max_bet*0.8).toFixed(2).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/,'$1')}}
+                                                80%
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn dark type="button" style="font-size: 18px" v-on:click="setMaxBet"
-                                                   fab>{{max_bet}}
+                                            <v-btn type="button"
+                                                   v-on:click="changeBetPower(0.9)"
+                                                   class="v-btn--small" fab>
+                                                90%
+                                            </v-btn>
+                                        </v-flex>
+                                        <v-flex>
+                                            <v-btn type="button" style="font-size: 18px"
+                                                   v-on:click="changeBetPower(1)"
+                                                   fab>100%
                                             </v-btn>
                                         </v-flex>
 
@@ -118,14 +140,14 @@
                                             <v-flex v-if="!place_bet_pressed && bet_permission" md12>
                                                 <v-btn type="submit"
                                                        style="height: 60px; font-size: 26px"
-                                                       class="v-btn--large bet-button" block dark>PLACE BET
+                                                       class="v-btn--large bet-button" block dark>BET: {{bet_power * 100}}%
                                                 </v-btn>
                                             </v-flex>
 
                                             <v-flex v-if="!bet_permission" md12>
                                                 <v-btn type="submit"
                                                        style="height: 60px; font-size: 26px"
-                                                       class="v-btn--large disable-events" block dark>SET BET VALUE
+                                                       class="v-btn--large disable-events" block dark>BET: {{bet_power * 100}}%
                                                 </v-btn>
                                             </v-flex>
                                             <v-flex v-else-if="place_bet_pressed">
@@ -156,35 +178,42 @@
                             </v-flex>
                         </v-layout>
                     </div>
-                    <v-layout class="ma-5">
-                        <v-flex md2 sm2>
-                            <v-text-field
-                                    style="font-size: 16px"
-                                    v-model="acc_number"
-                                    label="ACC"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex wrap row md10 sm10 style="font-size: 24px">
-                            <v-flex v-if="winner === 1">
-                                <v-flex>
-                                    P.Win Solo: {{((bet_value * team_1_odds) - bet_value).toFixed(2)}}
-                                </v-flex>
-                                <v-flex>
-                                    P.Win All : {{(((bet_value * team_1_odds) - bet_value) * acc_number).toFixed(2)}}
-                                </v-flex>
-                            </v-flex>
-                            <v-flex v-else="winner === 2">
-                                <v-flex>
-                                    P.Win Solo: {{((bet_value * team_2_odds) - bet_value).toFixed(2)}}
-                                </v-flex>
-                                <v-flex>
-                                    P.Win All : {{(((bet_value * team_2_odds) - bet_value) * acc_number).toFixed(2)}}
-                                </v-flex>
-                            </v-flex>
-                        </v-flex>
+                    <v-card  align-center style="background-color: #9ccc65; height: 100px;">
+                        <v-layout align-center justify-center row fill-height ma-3
+                        >
+                            <v-flex xs12 row style="">
+                                <v-layout>
+                                    <v-card-text style="background-color: #ff6156">MAX: {{max_bet}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood">ACTIVE: {{active_players_count}}</v-card-text>
+                                    <v-card-text style="background-color: yellow">TOTAL BET: {{total_bet}} </v-card-text>
 
+                                </v-layout>
 
-                    </v-layout>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
+                    <v-card  align-center style="background-color: #9ccc65; height: 100px;">
+                        <v-layout align-center justify-center row fill-height ma-3
+                                  >
+                            <v-flex xs6 row style="border-right: 1px solid black">
+                                <v-layout xs6>
+                                    <v-card-text style="background-color: #ff6156">856</v-card-text>
+                                    <v-card-text style="background-color: burlywood">1.76</v-card-text>
+                                    <v-card-text style="background-color: yellow">1507</v-card-text>
+                                    <v-card-text style="background-color: green">651</v-card-text>
+                                </v-layout>
+                            </v-flex>
+                            <v-divider></v-divider>
+                            <v-flex xs6 >
+                                <v-layout xs6>
+                                    <v-card-text style="background-color: #ff6156">856</v-card-text>
+                                    <v-card-text style="background-color: burlywood">1.76</v-card-text>
+                                    <v-card-text style="background-color: yellow">1507</v-card-text>
+                                    <v-card-text style="background-color: green">651</v-card-text>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
                 </v-flex>
                 <v-flex md4 sm4>
                     <v-layout v-if="!reverseTeams" v-on:click="chooseWinner(2)"
@@ -218,18 +247,28 @@
 </template>
 
 <script>
-    import {zplaySocket} from "../common/websockets";
-    import {zplaySocketReserve} from '../common/websockets'
-    import {bus} from "../services/bus";
 
+
+    import {calcDelay} from "../services/ProfitService/calcDelay";
+    import {bus} from "../services/bus";
+    import {randomBetArray} from "../services/ProfitService/randomBetArray";
+    import {randomFromPlayersArray} from "../services/ProfitService/randomFromArray";
+    import Chance from 'chance';
+    const chance = new Chance();
 
     export default {
         name: 'Match',
         data() {
             return {
+                inactive_players_obj: {},
+                bet_power: 1,
                 reverseTeams: false,
                 match_id: '',
-
+                match_players: [],
+                active_players: [],
+                active_players_count: 0,
+                inactive_players: [],
+                inactive_players_count: 0,
                 match_url: '',
                 url_transition: false,
                 team_1_name: undefined,
@@ -239,8 +278,7 @@
                 team_1_odds: 0,
                 team_2_odds: 0,
                 p_win: 0,
-                bo: 'bo_info',
-                max_bet: 0,
+                max_bet: 10,
                 winner: 0,
                 bet_value: 0,
                 timer: false,
@@ -248,7 +286,6 @@
                 seconds: 0,
                 intervals: [],
                 bet_button: false,
-                acc_number: 31
 
             }
         },
@@ -257,31 +294,130 @@
             usd: Number
         },
 
-        deactivated: function() {
-            bus.$emit('match1', {
-                team_1_name: 'Navi',
-                team_2_name: "VP"
+        created() {
+            bus.$on('match1', () => {
+                if (localStorage['match1-players-ids']) {
+                    let matchPlayersIds = JSON.parse(localStorage['match1-players-ids']);
+                    this.players.forEach(elem => {
+                        matchPlayersIds.forEach(el => {
+                            if (elem.player_id == el) {
+                                this.match_players.push(elem)
+                                console.log(this.match_players)
+                            }
+                        })
+                    })
+                    this.match_players.forEach(elem => {
+                        this.active_players.push(elem)
+                    })
+                    localStorage['match1-active-players'] = JSON.stringify(this.active_players)
+
+                } else {
+                    this.match_players = [];
+                    this.active_players = [];
+                    console.log(this.match_players)
+                }
+            })
+
+
+            if (localStorage['match1-players-ids']) {
+                let matchPlayersIds = JSON.parse(localStorage['match1-players-ids']);
+                this.players.forEach(elem => {
+                    matchPlayersIds.forEach(el => {
+                        if (elem.player_id == el) {
+                            this.match_players.push(elem)
+                            console.log(this.match_players)
+                        }
+                    })
+                })
+            } else {
+                this.match_players = []
+                console.log(this.match_players)
+            }
+
+            if (localStorage['match1-active-players']) {
+                this.active_players = JSON.parse(localStorage['match1-active-players']);
+            }
+            else this.match_players.forEach(elem => {
+                this.active_players.push(elem)
             })
         },
-        created() {
 
+
+
+        watch: {
+
+            players: function () {
+                if (localStorage['match1-players-ids']) {
+                    let matchPlayersIds = JSON.parse(localStorage['match1-players-ids']);
+                    console.log('STEP !');
+                    this.match_players = [];
+                    this.players.forEach(elem => {
+                        matchPlayersIds.forEach(el => {
+                            if (elem.player_id == el) {
+                                this.match_players.push(elem)
+                                console.log('STEP 2')
+                                console.log(this.match_players)
+                            }
+                        })
+                    })
+                } else {
+                    this.match_players = []
+                    console.log(this.match_players)
+                }
+            },
+
+            active_players: function() {
+                this.active_players_count = 0;
+                this.active_players.forEach(elem => {
+                    this.active_players_count++
+                })
+            },
+
+            match_url: function () {
+                this.url_transition = true
+            },
+
+            winner: function (data) {
+
+                if (data == 1) {
+                    this.$socket.emit('msg_to_watcher', {
+                        steam_username: JSON.parse(localStorage['match1-watcher'])[0].steam_username,
+                        team_winner: data,
+                    })
+                } else if (data == 2) {
+                    this.$socket.emit('msg_to_watcher', {
+                        steam_username: JSON.parse(localStorage['match1-watcher'])[0].steam_username,
+                        team_winner: data,
+                    })
+                }
+
+            }
         },
+
 
         sockets: {
 
 
             bet_msg_from_watcher: function (data) {
-                if (data.match_url) this.match_url = data.match_url;
-                if (data.team_1_name) this.team_1_name = data.team_1_name;
-                if (data.team_2_name) this.team_2_name = data.team_2_name;
-                if (data.team_1_odds) this.team_1_odds = data.team_1_odds.slice(1);
-                if (data.team_2_odds) this.team_2_odds = data.team_2_odds.slice(1);
-                if (data.t_name) this.t_name = data.t_name;
-                if (data.bo) this.bo = data.bo;
-                if (data.map_num_info) this.map_num_info = data.map_num_info;
-                if (data.max_bet) this.max_bet = data.max_bet;
-                if (data.team_1_img) this.team_1_img = data.team_1_img;
-                if (data.team_2_img) this.team_2_img = data.team_2_img
+                try {
+                    if (data.player_id == JSON.parse(localStorage['match1-watcher-id'])[0]) {
+                        if (data.match_url) this.match_url = data.match_url;
+                        if (data.team_1_name) this.team_1_name = data.team_1_name;
+                        if (data.team_2_name) this.team_2_name = data.team_2_name;
+                        if (data.team_1_odds) this.team_1_odds = data.team_1_odds.slice(1);
+                        if (data.team_2_odds) this.team_2_odds = data.team_2_odds.slice(1);
+                        if (data.t_name) this.t_name = data.t_name;
+                        if (data.bo) this.bo = data.bo;
+                        if (data.map_num_info) this.map_num_info = data.map_num_info;
+                        if (data.max_bet) this.max_bet = parseInt(data.max_bet);
+                        if (data.team_1_img) this.team_1_img = data.team_1_img;
+                        if (data.team_2_img) this.team_2_img = data.team_2_img
+                    }
+                } catch (e) {
+                    console.log('match1-watcher-id LS отсутствует')
+                }
+
+
             },
             bet_msg_from_player: function (data) {
                 if (data.timer === true && this.timer === false) this.timer = true
@@ -300,66 +436,139 @@
         },
 
         methods: {
+            changeBetPower(power) {
+                this.bet_power = power
+                console.log(this.bet_power)
+            },
+
+
+            calcDelay() {
+                let delayArray = calcDelay(0.5);
+                let matchPlayers = JSON.parse(localStorage['match1-players']);
+                matchPlayers.forEach((elem, index) => {
+                    elem.delay = delayArray[index]
+                })
+
+                console.log(matchPlayers)
+            },
+
+
             chooseWinner(t_winner) {
                 this.winner = t_winner;
             },
 
             placeBet(e) {
-                const randomBet = bet_value => {
-                    let arr;
-                    let rand;
-                    let betTotal;
-                    if (bet_value < this.max_bet && bet_value > 0.17) {
-                        console.log('>0.17')
-                        arr = [-0.01, 0, 0.01]
-                        rand = Math.floor(Math.random() * arr.length);
-                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
-                        return betTotal
-                    } else if (bet_value < this.max_bet && bet_value > 0.3) {
-                        console.log('>0.3')
-                        arr = [-0.2, -0.1, 0, 0.1, 0.2]
-                        rand = Math.floor(Math.random() * arr.length);
-                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
-                        return betTotal
-                    } else if (bet_value < this.max_bet && bet_value > 0.6) {
-                        console.log('>0.7')
-                        arr = [-0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3]
-                        rand = Math.floor(Math.random() * arr.length);
-                        betTotal = (parseFloat(bet_value) + parseFloat(arr[rand])).toFixed(2);
-                        return betTotal
-                    } else {
-                        return bet_value
-                    }
-                };
-
-                const currencyChoose = currency => {
-                    if (currency == "usd") {
-                        return randomBet(this.bet_value)
-                    } else if (currency == "rub") {
-                        if (this.bet_value < 0.15) {
-                            return 10
-                        } else {
-                            console.log(`USD: ${this.usd}`);
-                            return (randomBet(this.bet_value) * parseInt(this.usd)).toFixed(0)
-                        }
-                    }
-                };
-
                 e.preventDefault();
-                if (this.winner && this.bet_value !== 0) {
+                if (this.winner) {
+
+
+
                     console.log('placeBet pressed');
                     this.place_bet_pressed = true;
                     this.seconds = 61;
                     this.timerOn();
 
-                    this.players.forEach(element => {
+                    let rbObj = {};
+                    let rbArray = [];
+                    let betPlayersCount = 0;
+                    let betPlayersArrayIds = [];
+                    let activePlayersIdsArray = [];
 
-                        this.$socket.emit('bet_msg_to_player', {
-                            steam_username: element.steam_username,
-                            team_winner: this.winner,
-                            bet_val: currencyChoose(element.currency)
-                        })
-                    });
+                    this.active_players.forEach(elem => {
+                        activePlayersIdsArray.push(elem.player_id)
+                    })
+
+
+                    rbObj = randomBetArray(this.bet_power, this.max_bet, this.active_players_count);
+                    rbArray = rbObj.genRBArray;
+                    betPlayersCount = rbObj.betAccCount;
+
+
+
+                    console.log(rbArray);
+                    console.log(betPlayersCount);
+
+                    betPlayersArrayIds = randomFromPlayersArray(activePlayersIdsArray, betPlayersCount);
+
+                    console.log(betPlayersArrayIds)
+
+                    // this.match_players.forEach((elem, index, array) => {
+                    //     betPlayersArrayIds.forEach((el, elIndex, elArray) => {
+                    //         if (elem.player_id == el) {
+                    //             elem.bet_size = rbArray[elIndex]
+                    //         }
+                    //     })
+                    // })
+                    //
+                    // console.log(this.match_players)
+
+                    let randomWord = '';
+                    randomWord = chance.word();
+                    this.inactive_players_obj[randomWord] = [];
+                    console.log(`WORD IS: ${randomWord}`)
+
+                    for (let i = 0; i < betPlayersArrayIds.length; i++) {
+                        for (let z = 0; z < this.active_players.length; z++) {
+                            if (betPlayersArrayIds[i] == this.active_players[z].player_id) {
+                                this.$socket.emit('bet_msg_to_player', {
+                                    steam_username: this.active_players[z].steam_username,
+                                    team_winner: this.winner,
+                                    bet_val: rbArray[i],
+                                    delay: 500
+                                })
+                                this.inactive_players_obj[randomWord].push(this.active_players[z]);
+                                this.active_players.splice(z, 1);
+                                z--;
+                            }
+                        }
+                    }
+
+                    setTimeout( () => {
+
+
+
+                        for (let i = 0; i < this.inactive_players_obj[randomWord].length; i++) {
+                            this.active_players.push(this.inactive_players_obj[randomWord][i]);
+
+                        }
+
+                        for (let i = 0; i < this.inactive_players_obj[randomWord].length; i++) {
+                            this.inactive_players_obj[randomWord].splice(i, 1);
+                            i--;
+
+                        }
+
+                        console.log(`INACTIVE PLAYERS: ${this.inactive_players}`);
+                        console.log(`ACTIVE PLAYERS: ${this.active_players}`);
+
+                    }, 5000)
+
+
+
+                    // betPlayersArrayIds.forEach((elem, index,array) => {
+                    //     this.active_players.forEach((el, elIndex, elArray) => {
+                    //         if (elem == el.player_id) {
+                    //             this.inactive_players.push(elem)
+                    //             elArray.splice(index,1);
+                    //             elIndex = 0;
+                    //             console.log('ELEM DELETE')
+                    //         }
+                    //     })
+                    // })
+                    //
+                    //
+                    //
+
+
+
+                    // this.players.forEach(element => {
+                    //
+                    //     this.$socket.emit('bet_msg_to_player', {
+                    //         steam_username: element.steam_username,
+                    //         team_winner: this.winner,
+                    //         bet_val: this.bet_val
+                    //     })
+                    // });
 
                 } else alert('НЕ ВЫБРАНА КОМАНДА ИЛИ НЕ ВВЕДЕНА СУММА СТАВКИ');
             },
@@ -384,11 +593,7 @@
                 this.place_bet_pressed = false
             },
 
-            setMaxBet() {
-                console.log('MAX BET')
-                this.bet_value = this.max_bet
-                this.$socket.emit('dota2_match', 4545430533)
-            },
+
             urlHandler() {
                 console.log('URL HANDLER: ');
                 this.url_transition = false;
@@ -400,36 +605,7 @@
                     })
                 })
             },
-        },
 
-        watch: {
-
-            match_url: function () {
-                this.url_transition = true
-            },
-
-            winner: function (data) {
-
-                if (data == 1) {
-                    this.$socket.emit('msg_to_watcher', {
-                        steam_username: 'watcher',
-                        team_winner: data,
-                    })
-                } else if (data == 2) {
-                    this.$socket.emit('msg_to_watcher', {
-                        steam_username: 'watcher',
-                        team_winner: data,
-                    })
-                }
-
-            },
-
-
-            max_bet: function () {
-                if (this.bet_value > this.max_bet) {
-                    this.bet_value = this.max_bet
-                }
-            },
 
             'dota2_scoreboard.win_side': function (data) {
 
@@ -449,11 +625,17 @@
                     this.dota2_scoreboard.radiant.radiant_gold_lead = '--'
                 }
             }
-        },
+        }
+        ,
+
 
         computed: {
             bet_permission: function () {
-                return !!(this.winner && this.bet_value != 0);
+                return !!(this.winner);
+            },
+
+            total_bet: function () {
+                return this.active_players_count * this.max_bet * this.bet_power
             }
         }
     }
@@ -613,4 +795,5 @@
     .url-transition {
         background-color: green !important;
     }
+
 </style>

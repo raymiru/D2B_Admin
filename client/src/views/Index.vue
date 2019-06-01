@@ -86,21 +86,21 @@
                     <v-card-text>All Players</v-card-text>
                     <v-layout row>
                         <v-card-text class="">
-                            All Players: {{players.all_players_count}}
+                            All Players: {{players.all_players.players_count}}
                         </v-card-text>
                         <v-card-text class="">
-                            Free players: {{players.free_players_count}}
+                            Free Players: {{free}}
                         </v-card-text>
                     </v-layout>
                 </v-card>
                 <v-card class="item">
-                    <v-card-text>All Players</v-card-text>
+                    <v-card-text>All Watchers</v-card-text>
                     <v-layout row>
                         <v-card-text class="">
-                            All Players: {{players.all_players_count}}
+                            All Watchers: {{watchers.all_watchers.watchers_count}}
                         </v-card-text>
                         <v-card-text class="">
-                            Free players: {{players.free_players_count}}
+                            Free Watchers: {{w_free}}
                         </v-card-text>
                     </v-layout>
                 </v-card>
@@ -112,7 +112,7 @@
                     <v-card-text>Match 1</v-card-text>
                     <v-layout row>
                         <v-card-text class="match_count_card">
-                            M1 Players: {{players.matches_players.match1.players_count}}
+                            Players: {{players.matches_players.match1.players_count}}
                         </v-card-text>
                         <v-card-text class="">
                             <v-text-field
@@ -121,13 +121,16 @@
                                     label="Need count players?"
                             ></v-text-field>
                         </v-card-text>
+                        <v-card-text class="match_count_card">
+                            WR ID: {{watchers.matches_watchers.match1.watcher_id}}
+                        </v-card-text>
                     </v-layout>
                 </v-card>
                 <v-card class="item">
                     <v-card-text>Match 2</v-card-text>
                     <v-layout row>
                         <v-card-text class="match_count_card">
-                            M2 Players: {{players.match2_players_count}}
+                            Players: {{players.matches_players.match2.players_count}}
                         </v-card-text>
                         <v-card-text class="">
                             <v-text-field
@@ -136,13 +139,16 @@
                                     label="Need count players?"
                             ></v-text-field>
                         </v-card-text>
+                        <v-card-text class="match_count_card">
+                            WR ID: {{watchers.matches_watchers.match2.watcher_id}}
+                        </v-card-text>
                     </v-layout>
                 </v-card>
                 <v-card class="item">
                     <v-card-text>Match 3</v-card-text>
                     <v-layout row>
                         <v-card-text class="match_count_card">
-                            M3 Players: {{players.match3_players_count}}
+                            Players: {{players.matches_players.match3.players_count}}
                         </v-card-text>
                         <v-card-text class="">
                             <v-text-field
@@ -150,6 +156,9 @@
                                     v-model="players.matches_players.match3.players_need_count"
                                     label="Need count players?"
                             ></v-text-field>
+                        </v-card-text>
+                        <v-card-text class="match_count_card">
+                            WR ID: {{watchers.matches_watchers.match3.watcher_id}}
                         </v-card-text>
                     </v-layout>
                 </v-card>
@@ -256,7 +265,44 @@
 
                 matches: null,
 
+                watchers: {
+                    w_free: 0,
+                    all_watchers: {
+                        watchers: null,
+                        watchers_ids: [],
+                        watchers_count: 0,
+                    },
+
+                    free_watchers: {
+                        watchers: null,
+                        watchers_ids: [],
+                        watchers_count: 0
+                    },
+
+                    matches_watchers: {
+                        match1: {
+                            watcher: null,
+                            watcher_id: null,
+                            watchers_count: 0
+                        },
+
+                        match2: {
+                            watcher: null,
+                            watcher_id: null,
+                            watchers_count: 0
+                        },
+
+                        match3: {
+                            watcher: null,
+                            watcher_id: null,
+                            watchers_count: 0
+                        }
+                    }
+
+                },
+
                 players: {
+                    free: 0,
                     all_players: {
                         players: null,
                         players_ids: [],
@@ -298,6 +344,7 @@
                         }
                     },
                 }
+
             }
         },
 
@@ -305,6 +352,11 @@
             sendTeamNames() {
                 localStorage['header-matches'] = JSON.stringify(this.matches)
                 bus.$emit('header-matches-event')
+            },
+
+            fillMatchPlayers() {
+                bus.$emit('match1')
+                console.log('fill match players')
             },
 
             clearHeaderMatchesLS() {
@@ -330,83 +382,252 @@
 
             allPlayersFree() {
                 localStorage['free-players-ids'] = localStorage['all-players-ids'];
+                localStorage['free-watchers-ids'] = localStorage['all-watchers-ids'];
                 delete localStorage['match1-players-ids'];
                 delete localStorage['match2-players-ids'];
                 delete localStorage['match3-players-ids'];
+                delete localStorage['match1-players'];
+                delete localStorage['match2-players'];
+                delete localStorage['match3-players'];
+                delete localStorage['match1-players-count'];
+                delete localStorage['match2-players-count'];
+                delete localStorage['match3-players-count'];
+
+                delete localStorage['match1-watcher-id'];
+                delete localStorage['match2-watcher-id'];
+                delete localStorage['match3-watcher-id'];
+                delete localStorage['match1-watcher'];
+                delete localStorage['match2-watcher'];
+                delete localStorage['match3-watcher'];
+                delete localStorage['match1-watchers-count'];
+                delete localStorage['match2-watchers-count'];
+                delete localStorage['match3-watchers-count'];
+
+                delete localStorage['match1-active-players'];
+                delete localStorage['match2-active-players'];
+                delete localStorage['match3-active-players'];
+
                 this.players.matches_players.match1.out_button_pressed = true;
                 this.players.matches_players.match2.out_button_pressed = true;
                 this.players.matches_players.match3.out_button_pressed = true;
                 this.players.matches_players.match1.enter_button_pressed = false;
                 this.players.matches_players.match2.enter_button_pressed = false;
                 this.players.matches_players.match3.enter_button_pressed = false;
+                this.players.matches_players.match1.players_count = 0;
+                this.players.matches_players.match2.players_count = 0;
+                this.players.matches_players.match3.players_count = 0;
+                this.watchers.matches_watchers.match1.watchers_count = 0;
+                this.watchers.matches_watchers.match2.watchers_count = 0;
+                this.watchers.matches_watchers.match3.watchers_count = 0;
+                this.watchers.matches_watchers.match1.watcher_id = null;
+                this.watchers.matches_watchers.match2.watcher_id = null;
+                this.watchers.matches_watchers.match3.watcher_id = null;
+
+                this.fillMatchPlayers();
             },
 
             goRandomPlayers(match, needPlayersCount) {
 
-                if (match === 'match1') {
-                    this.players.matches_players.match1.enter_button_pressed = true;
-                    this.players.matches_players.match1.out_button_pressed = false;
-                }
-                if (match === 'match2') {
-                    this.players.matches_players.match2.enter_button_pressed = true;
-                    this.players.matches_players.match2.out_button_pressed = false;
-                }
-                if (match === 'match3') {
-                    this.players.matches_players.match3.enter_button_pressed = true;
-                    this.players.matches_players.match3.out_button_pressed = false;
-                }
+                if (needPlayersCount > 0 && needPlayersCount !== null && this.w_free !== 0) {
+                    this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
+                    this.watchers.free_watchers.watchers_ids = JSON.parse(localStorage['free-watchers-ids'])
+                    localStorage[`${match}-players-ids`] = JSON.stringify(randomFromPlayersArray(this.players.free_players.players_ids, needPlayersCount));
+                    localStorage[`${match}-watcher-id`] = JSON.stringify(randomFromPlayersArray(this.watchers.free_watchers.watchers_ids, 1));
+                    localStorage['free-players-ids'] = JSON.stringify(this.players.free_players.players_ids);
+                    localStorage['free-watchers-ids'] = JSON.stringify(this.watchers.free_watchers.watchers_ids);
 
-                this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
-                localStorage[`${match}-players-ids`] = JSON.stringify(randomFromPlayersArray(this.players.free_players.players_ids, needPlayersCount));
-                localStorage['free-players-ids'] = JSON.stringify(this.players.free_players.players_ids)
+                    let index = -1;
+                    let w_index = -1;
+                    try {
+                        console.log(JSON.parse(localStorage[`${match}-players-ids`]));
+                        let all_players = JSON.parse(localStorage['all-players']);
+                        let match1_players_ids = JSON.parse(localStorage[`${match}-players-ids`]);
+                        let match1_players = [];
+
+                        let all_watchers = JSON.parse(localStorage['all-watchers']);
+                        let match1_watcher_id = JSON.parse(localStorage[`${match}-watcher-id`]);
+                        let match1_watcher = [];
+
+                        all_watchers.forEach(elem => {
+                            match1_watcher_id.forEach(el => {
+                                if (elem.player_id == el) {
+                                    w_index++;
+                                    match1_watcher.push(elem)
+                                }
+                            })
+                        });
+
+                        localStorage[`${match}-watcher`] = JSON.stringify(match1_watcher);
+
+
+                        all_players.forEach(elem => {
+                            match1_players_ids.forEach(el => {
+                                if (elem.player_id == el) {
+                                    index++;
+                                    match1_players.push(elem)
+                                }
+                            })
+                        })
+
+                        localStorage[`${match}-players`] = JSON.stringify(match1_players);
+                    } catch (e) {
+                        console.log(e)
+                    }
+
+                    if (match === 'match1') {
+                        this.players.matches_players.match1.enter_button_pressed = true;
+                        this.players.matches_players.match1.out_button_pressed = false;
+                        localStorage['match1-players-count'] = index + 1;
+                        localStorage['match1-watchers-count'] = w_index + 1;
+                        this.players.matches_players.match1.players_count = index + 1;
+                        this.watchers.matches_watchers.match1.watchers_count = w_index + 1;
+                        this.watchers.matches_watchers.match1.watcher_id = JSON.parse(localStorage['match1-watcher-id'])[0];
+                        console.log(this.watchers.matches_watchers.match1.watcher_id)
+                        this.fillMatchPlayers()
+
+
+                    }
+                    if (match === 'match2') {
+                        this.players.matches_players.match2.enter_button_pressed = true;
+                        this.players.matches_players.match2.out_button_pressed = false;
+                        localStorage['match2-players-count'] = index + 1;
+                        localStorage['match2-watchers-count'] = w_index + 1;
+                        this.players.matches_players.match2.players_count = index + 1;
+                        this.watchers.matches_watchers.match2.watchers_count = w_index + 1;
+                        this.watchers.matches_watchers.match2.watcher_id = JSON.parse(localStorage['match2-watcher-id'])[0];
+                        console.log(this.watchers.matches_watchers.match2.watcher_id)
+                        this.fillMatchPlayers()
+                    }
+                    if (match === 'match3') {
+                        this.players.matches_players.match3.enter_button_pressed = true;
+                        this.players.matches_players.match3.out_button_pressed = false;
+                        localStorage['match3-players-count'] = index + 1;
+                        localStorage['match3-watchers-count'] = w_index + 1;
+                        this.players.matches_players.match3.players_count = index + 1;
+                        this.watchers.matches_watchers.match3.watchers_count = w_index + 1;
+                        this.watchers.matches_watchers.match3.watcher_id = JSON.parse(localStorage['match3-watcher-id'])[0];
+                        console.log(this.watchers.matches_watchers.match3.watcher_id)
+                        this.fillMatchPlayers()
+                    }
+                }
             },
 
             outMatchPlayers(match) {
                 if (match === 'match1') {
+
+                    this.players.matches_players.match1.players_count = 0;
+                    this.watchers.matches_watchers.match1.watchers_count = 0;
                     this.players.matches_players.match1.out_button_pressed = true;
                     this.players.matches_players.match1.enter_button_pressed = false;
                     this.players.matches_players.match1.players_ids = JSON.parse(localStorage['match1-players-ids']);
+
+                    this.watchers.matches_watchers.match1.watcher_id = JSON.parse(localStorage['match1-watcher-id']);
+
                     delete localStorage['match1-players-ids'];
+                    delete localStorage['match1-players'];
+                    delete localStorage['match1-players-count'];
+
+                    delete localStorage['match1-watcher-id'];
+                    delete localStorage['match1-watcher'];
+                    delete localStorage['match1-watchers-count'];
+
                     this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
                     this.players.matches_players.match1.players_ids.forEach(elem => {
                         this.players.free_players.players_ids.push(elem)
                     });
                     localStorage['free-players-ids'] = JSON.stringify(this.players.free_players.players_ids)
+
+                    this.watchers.free_watchers.watchers_ids = JSON.parse(localStorage['free-watchers-ids']);
+                    this.watchers.matches_watchers.match1.watcher_id.forEach(elem => {
+                        this.watchers.free_watchers.watchers_ids.push(elem)
+                    })
+
+                    localStorage['free-watchers-ids'] = JSON.stringify(this.watchers.free_watchers.watchers_ids);
+                    delete localStorage['match1-watcher-id'];
+                    this.watchers.matches_watchers.match1.watcher_id = null
+
+                    this.fillMatchPlayers();
                 }
                 if (match === 'match2') {
-                    console.log('OUT')
-                    this.players.matches_players.match2.enter_button_pressed = false
+                    this.players.matches_players.match2.players_count = 0;
+                    this.watchers.matches_watchers.match2.watchers_count = 0;
                     this.players.matches_players.match2.out_button_pressed = true;
                     this.players.matches_players.match2.enter_button_pressed = false;
                     this.players.matches_players.match2.players_ids = JSON.parse(localStorage['match2-players-ids']);
+
+                    this.watchers.matches_watchers.match2.watcher_id = JSON.parse(localStorage['match2-watcher-id']);
+
                     delete localStorage['match2-players-ids'];
+                    delete localStorage['match2-players'];
+                    delete localStorage['match2-players-count'];
+
+                    delete localStorage['match2-watcher-id'];
+                    delete localStorage['match2-watcher'];
+                    delete localStorage['match2-watchers-count'];
+
                     this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
                     this.players.matches_players.match2.players_ids.forEach(elem => {
                         this.players.free_players.players_ids.push(elem)
                     });
                     localStorage['free-players-ids'] = JSON.stringify(this.players.free_players.players_ids)
+
+                    this.watchers.free_watchers.watchers_ids = JSON.parse(localStorage['free-watchers-ids']);
+                    this.watchers.matches_watchers.match2.watcher_id.forEach(elem => {
+                        this.watchers.free_watchers.watchers_ids.push(elem)
+                    })
+
+                    localStorage['free-watchers-ids'] = JSON.stringify(this.watchers.free_watchers.watchers_ids);
+                    delete localStorage['match2-watcher-id'];
+                    this.watchers.matches_watchers.match2.watcher_id = null
+
+                    this.fillMatchPlayers();
                 }
                 if (match === 'match3') {
-                    console.log('OUT')
+                    this.players.matches_players.match3.players_count = 0;
+                    this.watchers.matches_watchers.match3.watchers_count = 0;
                     this.players.matches_players.match3.enter_button_pressed = false
                     this.players.matches_players.match3.out_button_pressed = true;
-                    this.players.matches_players.match3.enter_button_pressed = false;
                     this.players.matches_players.match3.players_ids = JSON.parse(localStorage['match3-players-ids']);
+                    this.watchers.matches_watchers.match3.watcher_id = JSON.parse(localStorage['match3-watcher-id']);
+
                     delete localStorage['match3-players-ids'];
+                    delete localStorage['match3-players'];
+                    delete localStorage['match3-players-count'];
+
+                    delete localStorage['match3-watcher-id'];
+                    delete localStorage['match3-watcher'];
+                    delete localStorage['match3-watchers-count'];
+
                     this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
                     this.players.matches_players.match3.players_ids.forEach(elem => {
                         this.players.free_players.players_ids.push(elem)
                     });
                     localStorage['free-players-ids'] = JSON.stringify(this.players.free_players.players_ids)
+
+                    this.watchers.free_watchers.watchers_ids = JSON.parse(localStorage['free-watchers-ids']);
+                    this.watchers.matches_watchers.match3.watcher_id.forEach(elem => {
+                        this.watchers.free_watchers.watchers_ids.push(elem)
+                    })
+
+                    localStorage['free-watchers-ids'] = JSON.stringify(this.watchers.free_watchers.watchers_ids);
+                    delete localStorage['match3-watcher-id'];
+                    this.watchers.matches_watchers.match3.watcher_id = null
+
+                    this.fillMatchPlayers()
                 }
             }
         },
+        watch: {},
 
         computed: {
-            // 'players.free_players.players_ids': function () {
-            //     this.players.free_players.players_ids = JSON.parse(localStorage['free-players-ids']);
-            //     console.log(this.players.free_players.players_ids)
-            // }
+            free() {
+                return this.players.all_players.players_count - this.players.matches_players.match1.players_count - this.players.matches_players.match2.players_count - this.players.matches_players.match3.players_count;
+
+            },
+
+            w_free() {
+                return this.watchers.all_watchers.watchers_count - this.watchers.matches_watchers.match1.watchers_count - this.watchers.matches_watchers.match2.watchers_count - this.watchers.matches_watchers.match3.watchers_count
+            }
         },
 
         created() {
@@ -415,24 +636,62 @@
                 all players
                 * */
 
-                this.players.all_players.players = JSON.parse(localStorage['all-players']);
-
-                this.players.all_players.forEach(elem => {
-                    this.players.all_players_ids.push(elem.player_id)
-                });
-
-                this.players.all_players.forEach(() => {
-                    this.players.all_players_count++;
+                let all_players = JSON.parse(localStorage['all-players-ids']);
+                all_players.forEach(elem => {
+                    this.players.all_players.players_count++
                 });
 
                 /*
+                all watchers
+                * */
+                let all_watchers = JSON.parse(localStorage['all-watchers-ids']);
+                all_watchers.forEach(elem => {
+                    this.watchers.all_watchers.watchers_count++;
+                })
+
+                console.log(this.players.all_players.players_count)
+                /*
                 free players
                 * */
-                // this.players.free_players = this.players.all_players;
-                //
-                // this.players.free_players_ids = this.players.all_players_ids;
 
-                this.players.free_players_count = this.players.all_players_count - this.players.match1_players_count - this.players.match2_players_count - this.players.match3_players_count;
+                if (localStorage['match1-players-count'] !== undefined) {
+                    this.players.matches_players.match1.players_count = localStorage['match1-players-count'];
+                    this.watchers.matches_watchers.match1.watchers_count = localStorage['match1-watchers-count'];
+                    this.players.matches_players.match1.enter_button_pressed = true
+                    this.players.matches_players.match1.out_button_pressed = false
+                }
+
+                if (localStorage['match2-players-count'] !== undefined) {
+                    this.players.matches_players.match2.players_count = localStorage['match2-players-count'];
+                    this.watchers.matches_watchers.match2.watchers_count = localStorage['match2-watchers-count'];
+                    this.players.matches_players.match2.enter_button_pressed = true
+                    this.players.matches_players.match2.out_button_pressed = false
+                }
+
+                if (localStorage['match3-players-count'] !== undefined) {
+                    this.players.matches_players.match3.players_count = localStorage['match3-players-count'];
+                    this.watchers.matches_watchers.match3.watchers_count = localStorage['match3-watchers-count'];
+                    this.players.matches_players.match3.enter_button_pressed = true
+                    this.players.matches_players.match3.out_button_pressed = false
+                }
+
+                if (localStorage['match1-watcher-id']) {
+                    this.watchers.matches_watchers.match1.watcher_id = JSON.parse(localStorage['match1-watcher-id'])[0];
+                }
+                if (localStorage['match2-watcher-id']) {
+                    this.watchers.matches_watchers.match2.watcher_id = JSON.parse(localStorage['match2-watcher-id'])[0];
+                }
+                if (localStorage['match3-watcher-id']) {
+                    this.watchers.matches_watchers.match3.watcher_id = JSON.parse(localStorage['match3-watcher-id'])[0];
+                }
+
+
+
+
+
+
+
+
             }, 1000);
 
             this.matches = JSON.parse(localStorage['header-matches'])
