@@ -2,7 +2,7 @@
     <v-app id="app" v-if="password === 'RayMiru'" style="background-color: whitesmoke">
         <Header></Header>
         <keep-alive>
-            <router-view v-bind:players="players" v-bind:usd ="usd"></router-view>
+            <router-view v-bind:players="players" v-bind:accounts="accounts" v-bind:usd ="usd"></router-view>
         </keep-alive>
     </v-app>
 </template>

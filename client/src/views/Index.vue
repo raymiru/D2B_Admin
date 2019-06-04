@@ -80,6 +80,9 @@
                         <v-btn v-on:click="allPlayersFree" class="ma-4">
                             ALL FREE
                         </v-btn>
+                        <v-btn v-on:click="goBack" class="ma-4">
+                            GO BACK
+                        </v-btn>
                     </v-layout>
                 </v-card>
                 <v-card class="item">
@@ -348,14 +351,32 @@
             }
         },
 
+        props: {
+            accounts: Array
+        },
+
         methods: {
+            goBack() {
+                try {
+
+                    this.accounts.forEach(element => {
+                        console.log(element.steam_username);
+                        this.$socket.emit('go_back', {
+                            steam_username: element.steam_username
+                        })
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+            },
+
             sendTeamNames() {
                 localStorage['header-matches'] = JSON.stringify(this.matches)
                 bus.$emit('header-matches-event')
             },
 
-            fillMatchPlayers() {
-                bus.$emit('match1')
+            fillMatchPlayers(match) {
+                bus.$emit(match)
                 console.log('fill match players')
             },
 
@@ -423,7 +444,9 @@
                 this.watchers.matches_watchers.match2.watcher_id = null;
                 this.watchers.matches_watchers.match3.watcher_id = null;
 
-                this.fillMatchPlayers();
+                this.fillMatchPlayers('match1');
+                this.fillMatchPlayers('match2');
+                this.fillMatchPlayers('match3');
             },
 
             goRandomPlayers(match, needPlayersCount) {
@@ -483,7 +506,7 @@
                         this.watchers.matches_watchers.match1.watchers_count = w_index + 1;
                         this.watchers.matches_watchers.match1.watcher_id = JSON.parse(localStorage['match1-watcher-id'])[0];
                         console.log(this.watchers.matches_watchers.match1.watcher_id)
-                        this.fillMatchPlayers()
+                        this.fillMatchPlayers('match1')
 
 
                     }
@@ -496,7 +519,7 @@
                         this.watchers.matches_watchers.match2.watchers_count = w_index + 1;
                         this.watchers.matches_watchers.match2.watcher_id = JSON.parse(localStorage['match2-watcher-id'])[0];
                         console.log(this.watchers.matches_watchers.match2.watcher_id)
-                        this.fillMatchPlayers()
+                        this.fillMatchPlayers('match2')
                     }
                     if (match === 'match3') {
                         this.players.matches_players.match3.enter_button_pressed = true;
@@ -507,12 +530,31 @@
                         this.watchers.matches_watchers.match3.watchers_count = w_index + 1;
                         this.watchers.matches_watchers.match3.watcher_id = JSON.parse(localStorage['match3-watcher-id'])[0];
                         console.log(this.watchers.matches_watchers.match3.watcher_id)
-                        this.fillMatchPlayers()
+                        this.fillMatchPlayers('match3')
                     }
                 }
             },
 
             outMatchPlayers(match) {
+                let m1Players = JSON.parse(localStorage['match1-players']);
+                let m1Watcher = JSON.parse(localStorage['match1-watcher']);
+
+                m1Players.forEach(elem => {
+                    console.log(elem.steam_username)
+                    this.$socket.emit('go_back', {
+                        steam_username: elem.steam_username
+                    })
+                });
+
+                m1Watcher.forEach(elem => {
+                    console.log(elem.steam_username)
+                    this.$socket.emit('go_back', {
+                        steam_username: elem.steam_username
+                    })
+                });
+
+
+
                 if (match === 'match1') {
 
                     this.players.matches_players.match1.players_count = 0;
@@ -546,7 +588,8 @@
                     delete localStorage['match1-watcher-id'];
                     this.watchers.matches_watchers.match1.watcher_id = null
 
-                    this.fillMatchPlayers();
+                    this.fillMatchPlayers('match1');
+
                 }
                 if (match === 'match2') {
                     this.players.matches_players.match2.players_count = 0;
@@ -580,7 +623,7 @@
                     delete localStorage['match2-watcher-id'];
                     this.watchers.matches_watchers.match2.watcher_id = null
 
-                    this.fillMatchPlayers();
+                    this.fillMatchPlayers('match2');
                 }
                 if (match === 'match3') {
                     this.players.matches_players.match3.players_count = 0;
@@ -613,7 +656,7 @@
                     delete localStorage['match3-watcher-id'];
                     this.watchers.matches_watchers.match3.watcher_id = null
 
-                    this.fillMatchPlayers()
+                    this.fillMatchPlayers('match3')
                 }
             }
         },
@@ -684,12 +727,6 @@
                 if (localStorage['match3-watcher-id']) {
                     this.watchers.matches_watchers.match3.watcher_id = JSON.parse(localStorage['match3-watcher-id'])[0];
                 }
-
-
-
-
-
-
 
 
             }, 1000);

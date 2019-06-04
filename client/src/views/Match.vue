@@ -34,7 +34,7 @@
                             <span class="mx-3">|</span>
 
                             <v-btn v-on:click="reverseTeams = !reverseTeams" type="button">Reverse</v-btn>
-                            <v-btn v-on:click="calcDelay" type="button">TEST</v-btn>
+
 
                         </v-flex>
                     </v-layout>
@@ -128,26 +128,38 @@
                                             </v-btn>
                                         </v-flex>
                                         <v-flex>
-                                            <v-btn type="button" style="font-size: 18px"
+                                            <v-btn dark type="button" style="font-size: 18px"
                                                    v-on:click="changeBetPower(1)"
                                                    fab>100%
                                             </v-btn>
                                         </v-flex>
-
                                     </v-flex>
+
+                                    <v-layout>
+                                        <v-flex xs12>
+                                            <v-slider
+                                                    v-model="bet_power"
+                                                    :max="1"
+                                                    :min="0.03"
+                                                    :step="0.01"
+                                            ></v-slider>
+                                        </v-flex>
+                                    </v-layout>
                                     <v-flex>
                                         <v-layout>
                                             <v-flex v-if="!place_bet_pressed && bet_permission" md12>
                                                 <v-btn type="submit"
                                                        style="height: 60px; font-size: 26px"
-                                                       class="v-btn--large bet-button" block dark>BET: {{bet_power * 100}}%
+                                                       class="v-btn--large bet-button" block dark>BET: {{bet_power *
+                                                    100}}%
                                                 </v-btn>
                                             </v-flex>
 
                                             <v-flex v-if="!bet_permission" md12>
                                                 <v-btn type="submit"
                                                        style="height: 60px; font-size: 26px"
-                                                       class="v-btn--large disable-events" block dark>BET: {{bet_power * 100}}%
+                                                       class="v-btn--large disable-events" block dark>BET: {{bet_power *
+                                                    100}}%
                                                 </v-btn>
                                             </v-flex>
                                             <v-flex v-else-if="place_bet_pressed">
@@ -174,44 +186,73 @@
                                     </v-flex>
 
 
+
+
+
                                 </v-form>
                             </v-flex>
                         </v-layout>
                     </div>
-                    <v-card  align-center style="background-color: #9ccc65; height: 100px;">
+                    <v-card align-center style="height: 100px;" v-bind:class="{vilka: vilka === 1}">
                         <v-layout align-center justify-center row fill-height ma-3
                         >
                             <v-flex xs12 row style="">
                                 <v-layout>
                                     <v-card-text style="background-color: #ff6156">MAX: {{max_bet}}</v-card-text>
-                                    <v-card-text style="background-color: burlywood">ACTIVE: {{active_players_count}}</v-card-text>
-                                    <v-card-text style="background-color: yellow">TOTAL BET: {{total_bet}} </v-card-text>
+                                    <v-card-text style="background-color: yellow">BET: {{total_bet}}</v-card-text>
+                                    <v-card-text style="background-color: green; color: white">P.WIN: {{total_pwin}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood; ">ACTIVE: {{active_players_count}}</v-card-text>
+
 
                                 </v-layout>
 
                             </v-flex>
                         </v-layout>
                     </v-card>
-                    <v-card  align-center style="background-color: #9ccc65; height: 100px;">
+                    <v-card v-if="!reverseTeams" align-center style="height: 100px;" v-bind:class="{vilka: vilka === 1}">
                         <v-layout align-center justify-center row fill-height ma-3
-                                  >
+                        >
                             <v-flex xs6 row style="border-right: 1px solid black">
                                 <v-layout xs6>
-                                    <v-card-text style="background-color: #ff6156">856</v-card-text>
-                                    <v-card-text style="background-color: burlywood">1.76</v-card-text>
-                                    <v-card-text style="background-color: yellow">1507</v-card-text>
-                                    <v-card-text style="background-color: green">651</v-card-text>
+                                    <v-card-text style="background-color: yellow">{{this.match_bet_stats.team_1_bet.total_bet}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood">{{this.total_odds_team1}}</v-card-text>
+
+                                    <v-card-text style="background-color: green; color: white">{{this.match_bet_stats.team_1_bet.total_pwin.toFixed(1)}}</v-card-text>
                                 </v-layout>
                             </v-flex>
                             <v-divider></v-divider>
-                            <v-flex xs6 >
+                            <v-flex xs6>
                                 <v-layout xs6>
-                                    <v-card-text style="background-color: #ff6156">856</v-card-text>
-                                    <v-card-text style="background-color: burlywood">1.76</v-card-text>
-                                    <v-card-text style="background-color: yellow">1507</v-card-text>
-                                    <v-card-text style="background-color: green">651</v-card-text>
+                                    <v-card-text style="background-color: yellow">{{this.match_bet_stats.team_2_bet.total_bet}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood">{{this.total_odds_team2}}</v-card-text>
+
+                                    <v-card-text style="background-color: green; color: white">{{this.match_bet_stats.team_2_bet.total_pwin.toFixed(1)}}</v-card-text>
                                 </v-layout>
                             </v-flex>
+                        </v-layout>
+                    </v-card>
+                    <v-card v-else-if="reverseTeams" align-center style="height: 100px;" v-bind:class="{vilka: vilka === 1}">
+                        <v-layout align-center justify-center row fill-height ma-3
+                        >
+                            <v-flex xs6>
+                                <v-layout xs6>
+                                    <v-card-text style="background-color: yellow">{{this.match_bet_stats.team_2_bet.total_bet}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood">{{this.total_odds_team2}}</v-card-text>
+
+                                    <v-card-text style="background-color: green; color: white">{{this.match_bet_stats.team_2_bet.total_pwin.toFixed(1)}}</v-card-text>
+                                </v-layout>
+                            </v-flex>
+                            <v-divider></v-divider>
+                            <v-flex xs6 row style="border-right: 1px solid black">
+                                <v-layout xs6>
+                                    <v-card-text style="background-color: yellow">{{this.match_bet_stats.team_1_bet.total_bet.toFixed(1)}}</v-card-text>
+                                    <v-card-text style="background-color: burlywood">{{this.total_odds_team1}}</v-card-text>
+
+                                    <v-card-text style="background-color: green; color: white">{{this.match_bet_stats.team_1_bet.total_pwin.toFixed(1)}}</v-card-text>
+                                </v-layout>
+                            </v-flex>
+
+
                         </v-layout>
                     </v-card>
                 </v-flex>
@@ -254,12 +295,25 @@
     import {randomBetArray} from "../services/ProfitService/randomBetArray";
     import {randomFromPlayersArray} from "../services/ProfitService/randomFromArray";
     import Chance from 'chance';
+
     const chance = new Chance();
 
     export default {
         name: 'Match',
         data() {
             return {
+                match_bet_stats: {
+                    team_1_bet: {
+                        total_bet: 0,
+                        total_odds: 0,
+                        total_pwin: 0,
+                    },
+                    team_2_bet :{
+                        total_bet: 0,
+                        total_odds: 0,
+                        total_pwin: 0,
+                    }
+                },
                 inactive_players_obj: {},
                 bet_power: 1,
                 reverseTeams: false,
@@ -336,15 +390,38 @@
 
             if (localStorage['match1-active-players']) {
                 this.active_players = JSON.parse(localStorage['match1-active-players']);
-            }
-            else this.match_players.forEach(elem => {
+            } else this.match_players.forEach(elem => {
                 this.active_players.push(elem)
             })
+
+
         },
 
 
-
         watch: {
+            match_players: function () {
+
+
+                setTimeout(() => {
+                    this.match_bet_stats.team_1_bet.total_bet = 0;
+                    this.match_bet_stats.team_1_bet.total_pwin = 0;
+                    this.match_bet_stats.team_2_bet.total_bet = 0;
+                    this.match_bet_stats.team_2_bet.total_pwin = 0;
+
+                    this.match_players.forEach(elem => {
+
+                        this.match_bet_stats.team_1_bet.total_bet+=parseFloat(elem.team_1_bet.total_bet);
+                        this.match_bet_stats.team_1_bet.total_pwin+=parseFloat(elem.team_1_bet.total_pwin);
+                        this.match_bet_stats.team_2_bet.total_bet+=parseFloat(elem.team_2_bet.total_bet);
+                        this.match_bet_stats.team_2_bet.total_pwin+=parseFloat(elem.team_2_bet.total_pwin);
+                    })
+
+
+
+
+                }, 100)
+            },
+
 
             players: function () {
                 if (localStorage['match1-players-ids']) {
@@ -366,7 +443,7 @@
                 }
             },
 
-            active_players: function() {
+            active_players: function () {
                 this.active_players_count = 0;
                 this.active_players.forEach(elem => {
                     this.active_players_count++
@@ -442,17 +519,6 @@
             },
 
 
-            calcDelay() {
-                let delayArray = calcDelay(0.5);
-                let matchPlayers = JSON.parse(localStorage['match1-players']);
-                matchPlayers.forEach((elem, index) => {
-                    elem.delay = delayArray[index]
-                })
-
-                console.log(matchPlayers)
-            },
-
-
             chooseWinner(t_winner) {
                 this.winner = t_winner;
             },
@@ -462,10 +528,9 @@
                 if (this.winner) {
 
 
-
                     console.log('placeBet pressed');
                     this.place_bet_pressed = true;
-                    this.seconds = 61;
+                    this.seconds = 60;
                     this.timerOn();
 
                     let rbObj = {};
@@ -484,12 +549,12 @@
                     betPlayersCount = rbObj.betAccCount;
 
 
-
                     console.log(rbArray);
                     console.log(betPlayersCount);
 
                     betPlayersArrayIds = randomFromPlayersArray(activePlayersIdsArray, betPlayersCount);
 
+                    console.log(calcDelay(this.bet_power, betPlayersCount));
                     console.log(betPlayersArrayIds)
 
                     // this.match_players.forEach((elem, index, array) => {
@@ -514,7 +579,7 @@
                                     steam_username: this.active_players[z].steam_username,
                                     team_winner: this.winner,
                                     bet_val: rbArray[i],
-                                    delay: 500
+                                    delay: calcDelay(this.bet_power)[0]
                                 })
                                 this.inactive_players_obj[randomWord].push(this.active_players[z]);
                                 this.active_players.splice(z, 1);
@@ -523,8 +588,7 @@
                         }
                     }
 
-                    setTimeout( () => {
-
+                    setTimeout(() => {
 
 
                         for (let i = 0; i < this.inactive_players_obj[randomWord].length; i++) {
@@ -541,8 +605,7 @@
                         console.log(`INACTIVE PLAYERS: ${this.inactive_players}`);
                         console.log(`ACTIVE PLAYERS: ${this.active_players}`);
 
-                    }, 5000)
-
+                    }, 60000)
 
 
                     // betPlayersArrayIds.forEach((elem, index,array) => {
@@ -560,7 +623,6 @@
                     //
 
 
-
                     // this.players.forEach(element => {
                     //
                     //     this.$socket.emit('bet_msg_to_player', {
@@ -575,7 +637,7 @@
             timerOn() {
 
                 console.log('TIMER')
-
+                this.intervals = []
                 let interval = setInterval(() => {
                     if (this.seconds > 0) {
                         this.seconds--;
@@ -597,12 +659,16 @@
             urlHandler() {
                 console.log('URL HANDLER: ');
                 this.url_transition = false;
-                this.players.forEach(element => {
+                this.match_players.forEach(element => {
                     console.log(element.steam_username);
                     this.$socket.emit('url_handler', {
                         steam_username: element.steam_username,
                         match_url: this.match_url
                     })
+                })
+                this.$socket.emit('url_handler', {
+                    steam_username: JSON.parse(localStorage['match1-watcher'])[0].steam_username,
+                    match_url: this.match_url
                 })
             },
 
@@ -635,8 +701,32 @@
             },
 
             total_bet: function () {
-                return this.active_players_count * this.max_bet * this.bet_power
+                return Math.round(this.active_players_count * this.max_bet * this.bet_power)
+            },
+
+            total_pwin: function () {
+                if (this.winner === 1) {
+                    return Math.round(this.total_bet * this.team_1_odds - this.total_bet)
+                }
+                if (this.winner === 2) {
+                    return Math.round(this.total_bet * this.team_2_odds - this.total_bet)
+                }
+            },
+
+            vilka: function () {
+                if (this.match_bet_stats.team_1_bet.total_bet < this.match_bet_stats.team_2_bet.total_pwin && this.match_bet_stats.team_1_bet.total_pwin >this.match_bet_stats.team_2_bet.total_bet) {
+                    return 1
+                } else return 0
+            },
+
+            total_odds_team1: function () {
+                return ((this.match_bet_stats.team_1_bet.total_pwin + this.match_bet_stats.team_1_bet.total_bet)/this.match_bet_stats.team_1_bet.total_bet).toFixed(2)
+            },
+
+            total_odds_team2: function () {
+                return ((this.match_bet_stats.team_2_bet.total_pwin + this.match_bet_stats.team_2_bet.total_bet)/this.match_bet_stats.team_2_bet.total_bet).toFixed(2)
             }
+
         }
     }
 </script>
@@ -794,6 +884,10 @@
 
     .url-transition {
         background-color: green !important;
+    }
+
+    .vilka {
+        background-color: #9ccc65 !important;
     }
 
 </style>

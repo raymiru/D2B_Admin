@@ -79,12 +79,12 @@ export const randomBetArray = (power, max_bet, active_accounts) => {
     let genArray = [];
 
 
-    for (let i = 0; i < active_accounts * 20; i++) {
-        if (chance.bool({likelihood: 70 * power})) {
+    for (let i = 0; i < active_accounts * 22; i++) {
+        if (chance.bool({likelihood: 52 * power})) {
             genArray.push(chance.integer({min: max_bet, max: max_bet}));
         }
 
-        if (chance.bool({likelihood: 40 * (1 - power)})) {
+        if (chance.bool({likelihood: 42 * (1 - power)})) {
             genArray.push(chance.integer({min: Math.round(max_bet / 2), max: Math.round(max_bet / 2)}));
         }
         if (chance.bool({likelihood: 80 * (1 - power)})) {

@@ -146,7 +146,20 @@ module.exports = (io) => {
                 console.log(e)
             }
         })
+
+        socket.on('go_back', msg => {
+            console.log('GO BACK');
+            try {
+                connectedUsers[msg.steam_username].emit('go_back', {
+
+                })
+            } catch (e) {
+                console.log(e)
+            }
+        })
     });
 };
+
+
 
 
