@@ -13,7 +13,7 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/chance": "^1.0.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "chance": "^1.0.18",
     "dota2-api": "^0.2.1",
     "mstsc.js": "^0.2.4",
